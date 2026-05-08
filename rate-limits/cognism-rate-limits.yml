@@ -8,28 +8,32 @@ modified: '2026-05-08'
 reconciled: false
 tags:
 - Sales Intelligence
-- B2B Data
-- Prospecting
-- Compliance
-- Diamond Data
+- B2B
+- Enrichment
+- Contact Data
+- GDPR
+- Intent Data
 - Rate Limiting
 - Quotas
 - Throttling
-description: Placeholder rate-limit artifact for Cognism. Replace with real limits once researched.
-notes: Initial scaffold — limits have not yet been reconciled.
+description: >-
+  Cognism does not publicly document API rate limits. Limits are configured per enterprise contract
+  and are typically expressed as monthly enrichment credits rather than RPS. Coordinate with your
+  Cognism customer success manager for specific thresholds.
+notes: Contract-defined credit pools, not public RPS limits.
 sources:
-- https://www.cognism.com/
+- https://www.cognism.com/api
 responseCodes:
   throttled: 429
 limits:
 - name: Default
   scope: account
-  metric: varies
-  limit: see provider documentation
-  notes: Pending reconciliation.
+  metric: credits
+  limit: contract-defined
+  notes: Monthly enrichment credit pool; not publicly documented.
 policies:
 - name: Backoff Strategy
-  description: Clients should implement exponential backoff with jitter and honor any Retry-After header.
+  description: Honor 429/Retry-After; coordinate quota increases through your Cognism CSM.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

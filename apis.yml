@@ -3,21 +3,44 @@ url: https://raw.githubusercontent.com/api-evangelist/cognism/refs/heads/main/ap
 name: Cognism
 x-type: company
 description: >-
-  Cognism is a sales intelligence platform with verified mobile phone numbers, GDPR-compliant data, and intent signals across global B2B contacts.
+  Cognism is a B2B sales intelligence platform providing verified emails, mobile numbers (Diamond
+  Data), firmographic data, intent signals, and enrichment. Cognism exposes APIs for enrichment and
+  integration but they are gated and not publicly self-serve; access is granted to enterprise
+  customers via partnerships and integrations.
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
   - Sales Intelligence
-  - B2B Data
-  - Prospecting
-  - Compliance
-  - Diamond Data
+  - B2B
+  - Enrichment
+  - Contact Data
+  - GDPR
+  - Intent Data
 created: '2026-05-08'
 modified: '2026-05-08'
 specificationVersion: '0.19'
-apis: []
+apis:
+  - aid: cognism:enrichment
+    name: Cognism Enrichment API
+    description: >-
+      REST API for enriching CRM records with contact and company data, including verified emails, phone
+      numbers, job titles, and firmographics. Available to enterprise Cognism customers; endpoints and
+      quotas are configured per contract.
+    humanURL: https://www.cognism.com/api
+    baseURL: https://api.cognism.com
+    tags:
+      - Enrichment
+      - Contacts
+      - Companies
+    properties:
+      - type: Documentation
+        url: https://www.cognism.com/api
+      - type: ContactSales
+        url: https://www.cognism.com/contact
 common:
   - type: Website
     url: https://www.cognism.com/
+  - type: DeveloperPortal
+    url: https://www.cognism.com/api
   - type: Plans
     url: plans/cognism-plans-pricing.yml
   - type: RateLimits

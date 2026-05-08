@@ -5,18 +5,23 @@ provider: Cognism
 providerId: cognism
 created: '2026-05-08'
 modified: '2026-05-08'
-reconciled: false
+reconciled: true
 tags:
 - Sales Intelligence
-- B2B Data
-- Prospecting
-- Compliance
-- Diamond Data
+- B2B
+- Enrichment
+- Contact Data
+- GDPR
+- Intent Data
 - FinOps
 - Cost Management
 - FOCUS
-description: FOCUS-aligned FinOps placeholder for Cognism. Pipeline will replace with real billing details.
-notes: Initial scaffold — billing model has not yet been reconciled.
+description: >-
+  FOCUS-aligned FinOps profile for Cognism. The cost lever is the annual enterprise contract —
+  typically a fixed seat-based commitment with a bundled credit pool for API enrichment. There is no
+  per-call invoicing. Cost optimization is at renewal: right-size seats and credit allotment based on
+  observed consumption.
+notes: Annual contract, prepaid; seats and credit pool are the optimization levers at renewal.
 sources:
 - https://www.cognism.com/
 - https://focus.finops.org/focus-specification/v1-3/
@@ -29,38 +34,42 @@ alignedWith:
 publisherName: Cognism
 serviceCategory: Sales Intelligence
 billingModel:
-  pricingCategory: To Be Reconciled
-  billingFrequency: Monthly
+  pricingCategory: Subscription
+  billingFrequency: Annual
   billingCurrency: USD
   chargeCategories:
-  - Usage
-  - Purchase
-  - Adjustment
+  - Subscription
+  - Commitment
 focusColumns:
-  ServiceName: Cognism
+  ServiceName: Cognism Platform
   ServiceCategory: Sales Intelligence
   ProviderName: Cognism
   PublisherName: Cognism
   InvoiceIssuerName: Cognism
   BillingCurrency: USD
-  ChargeCategory: Usage
+  ChargeCategory: Subscription
 meters:
-- name: api_usage
-  description: Catch-all meter pending reconciliation.
-  unit: varies
+- name: platform_seats
+  description: Number of licensed users.
+  unit: seat-month
+  aggregation: max
+  dimensions:
+  - team
+- name: enrichment_credits
+  description: API enrichment credits consumed.
+  unit: credit
   aggregation: sum
   dimensions:
-  - account
-  - resource
+  - endpoint
 principles:
 - name: Visibility
-  description: Pull provider invoices or usage exports until a self-serve usage feed is documented.
+  description: Track API credit consumption monthly against the contracted pool.
 - name: Allocation
-  description: Tag invoice line items to consuming business units in your FinOps store.
+  description: Allocate seats and credits to revenue teams (SDR, AE, marketing ops).
 - name: Optimization
-  description: Levers depend on the provider's billing model; review at renewal once reconciled.
+  description: At renewal, right-size seats and the credit pool; consolidate vendors if overlapping (Lusha, Apollo, ZoomInfo).
 - name: Accountability
-  description: Assign a contract owner to review billing against negotiated terms.
+  description: RevOps team owns the contract and renewal.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

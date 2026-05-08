@@ -8,34 +8,43 @@ modified: '2026-05-08'
 reconciled: false
 tags:
 - Sales Intelligence
-- B2B Data
-- Prospecting
-- Compliance
-- Diamond Data
+- B2B
+- Enrichment
+- Contact Data
+- GDPR
+- Intent Data
 - Plans
-description: Placeholder plans/pricing artifact for Cognism. Replace with real published pricing once
-  the pipeline researches the provider's plans page.
-notes: Initial scaffold — plans/pricing have not yet been reconciled.
+description: >-
+  Cognism does not publish self-serve API pricing. All access is sales-led and bundled into enterprise
+  seat-based contracts that include Diamond Data (verified mobile), Intent (Bombora), and platform
+  integrations (Salesforce, HubSpot, Outreach). Contract value is typically annual and includes credit
+  allowances rather than per-call pricing.
+notes: Sales-led pricing; no self-serve plans page. Contract values include enrichment credits and seat counts.
 sources:
 - https://www.cognism.com/
+- https://www.cognism.com/pricing
 plans:
-- id: cognism-default
-  name: To Be Reconciled
+- id: cognism-platform
+  name: Cognism Platform
   type: enterprise
-  description: Initial scaffold; replace with provider plan tiers once pricing is reconciled.
+  description: Annual seat-based contract bundling platform UI, API enrichment, integrations, and Diamond Data. Pricing on request.
   entries:
-  - label: API Access
-    name: api_access
+  - label: Platform
+    name: platform
     type: flat
-    metric: varies
+    metric: year
     limit: -1
-    timeFrame: usage
+    timeFrame: annual
     geo: global
     unit: 1
-    price: see https://www.cognism.com/
-    userMultiplied: false
+    price: contact sales
+    userMultiplied: true
   elements:
-  - name: Pending Reconciliation
+  - name: Platform UI access
+  - name: API enrichment credits
+  - name: Integrations (CRM, sales tools)
+  - name: Diamond Data (verified mobile)
+  - name: Intent Data (Bombora)
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
