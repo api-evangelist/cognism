@@ -1,0 +1,29 @@
+aid: cognism
+url: https://raw.githubusercontent.com/api-evangelist/cognism/refs/heads/main/apis.yml
+name: Cognism
+x-type: company
+description: >-
+  Cognism is a sales intelligence platform with verified mobile phone numbers, GDPR-compliant data, and intent signals across global B2B contacts.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Sales Intelligence
+  - B2B Data
+  - Prospecting
+  - Compliance
+  - Diamond Data
+created: '2026-05-08'
+modified: '2026-05-08'
+specificationVersion: '0.19'
+apis: []
+common:
+  - type: Website
+    url: https://www.cognism.com/
+  - type: Plans
+    url: plans/cognism-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/cognism-rate-limits.yml
+  - type: FinOps
+    url: finops/cognism-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
