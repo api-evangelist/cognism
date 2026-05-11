@@ -47,6 +47,36 @@ common:
     url: rate-limits/cognism-rate-limits.yml
   - type: FinOps
     url: finops/cognism-finops.yml
+  - type: Integrations
+    url: https://www.cognism.com/integrations
+integrations:
+  - name: cognism-logo-2026
+  - name: arrow
+  - name: Salesforce-logo-SF-lightening-partner
+  - name: zapier
+  - name: pd-white
+  - name: OutreachLogo-Horizontal-PassionBlueWhite
+  - name: hs-white
+  - name: bullhorn-white
+  - name: Salesloft-white
+  - name: ms-dynamics
+  - name: salesforce-2
+  - name: HubSpot-Logo
+  - name: Pipedrive-2
+  - name: bh-logo
+  - name: Dynamics-365-logo-1536x864
+  - name: Salesloft-logo-removebg-preview
+  - name: OutreachLogo-Horizontal-PassionBlueGrey
+  - name: Cognism_Infographic 5 (Dark)
+  - name: Simpleshow---company-logo-white-rectangle-1
+  - name: Simpleshow-1
+  - name: lead forensics-3
+  - name: Lead Forensics
+  - name: Coralogix---company-logo-white-rectangle
+  - name: Logos 130x26px_Coralogix (1)
+  - name: Televerde-logo-transparent-white-1
+  - name: Televerde-logo-transparent-colour-1
+  - name: cognism-logo-white
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
