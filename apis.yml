@@ -1,7 +1,7 @@
 aid: cognism
 url: https://raw.githubusercontent.com/api-evangelist/cognism/refs/heads/main/apis.yml
 name: Cognism
-x-type: company
+kind: company
 description: >-
   Cognism is a B2B sales intelligence platform providing verified emails, mobile numbers (Diamond
   Data), firmographic data, intent signals, and enrichment. Cognism exposes APIs for enrichment and
