@@ -37,6 +37,10 @@ apis:
       - type: ContactSales
         url: https://www.cognism.com/contact
 common:
+  - type: GitHubOrganization
+    url: https://github.com/Cognism
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/cognism
   - type: Website
     url: https://www.cognism.com/
   - type: DeveloperPortal
