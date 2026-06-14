@@ -1,0 +1,964 @@
+"""
+Cognism B2B Sales Intelligence - Conceptual GraphQL Schema
+Derived from Cognism public documentation and API capabilities.
+Covers contact enrichment, company data, phone/email verification,
+list management, CRM integrations, webhooks, and authentication.
+"""
+
+# ──────────────────────────────────────────────
+# Scalars
+# ──────────────────────────────────────────────
+
+scalar DateTime
+scalar Date
+scalar URL
+scalar EmailAddress
+scalar PhoneNumber
+scalar CountryCode
+scalar CurrencyCode
+scalar JSON
+
+# ──────────────────────────────────────────────
+# Enums
+# ──────────────────────────────────────────────
+
+enum SeniorityLevel {
+  C_SUITE
+  VP
+  DIRECTOR
+  MANAGER
+  SENIOR
+  INDIVIDUAL_CONTRIBUTOR
+  INTERN
+  UNKNOWN
+}
+
+enum DepartmentType {
+  SALES
+  MARKETING
+  ENGINEERING
+  PRODUCT
+  FINANCE
+  HR
+  OPERATIONS
+  LEGAL
+  CUSTOMER_SUCCESS
+  IT
+  DATA
+  DESIGN
+  EXECUTIVE
+  OTHER
+}
+
+enum ContactEmailType {
+  WORK
+  PERSONAL
+  GENERIC
+}
+
+enum PhoneType {
+  MOBILE
+  DIRECT
+  COMPANY
+  HQ
+}
+
+enum VerificationStatus {
+  VERIFIED
+  UNVERIFIED
+  INVALID
+  CATCH_ALL
+  UNKNOWN
+}
+
+enum CompanyTypeEnum {
+  PRIVATE
+  PUBLIC
+  NON_PROFIT
+  GOVERNMENT
+  EDUCATION
+  PARTNERSHIP
+  UNKNOWN
+}
+
+enum FundingRoundType {
+  PRE_SEED
+  SEED
+  SERIES_A
+  SERIES_B
+  SERIES_C
+  SERIES_D
+  SERIES_E
+  SERIES_F
+  GROWTH
+  IPO
+  ACQUISITION
+  DEBT_FINANCING
+  GRANT
+  UNDISCLOSED
+}
+
+enum InvestorType {
+  VENTURE_CAPITAL
+  PRIVATE_EQUITY
+  ANGEL
+  CORPORATE
+  FAMILY_OFFICE
+  ACCELERATOR
+  GOVERNMENT
+}
+
+enum TechCategoryType {
+  CRM
+  MARKETING_AUTOMATION
+  ERP
+  CLOUD_INFRASTRUCTURE
+  SECURITY
+  ANALYTICS
+  COLLABORATION
+  HR_TECH
+  FINANCE
+  CUSTOMER_SUPPORT
+  SALES_ENGAGEMENT
+  DATA_ENRICHMENT
+  OTHER
+}
+
+enum WebhookEventType {
+  CONTACT_ENRICHED
+  COMPANY_ENRICHED
+  BULK_JOB_COMPLETED
+  LIST_UPDATED
+  SEGMENT_UPDATED
+  CRM_SYNC_COMPLETED
+  CRM_SYNC_FAILED
+}
+
+enum IntegrationStatus {
+  ACTIVE
+  INACTIVE
+  ERROR
+  PENDING
+}
+
+enum SyncFrequency {
+  REAL_TIME
+  HOURLY
+  DAILY
+  WEEKLY
+}
+
+enum BulkJobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+  PARTIAL
+}
+
+enum KeyScope {
+  READ
+  WRITE
+  ENRICH
+  ADMIN
+}
+
+# ──────────────────────────────────────────────
+# Contact Types
+# ──────────────────────────────────────────────
+
+"""Core contact record representing a B2B professional."""
+type Contact {
+  id: ID!
+  firstName: String
+  lastName: String
+  fullName: String
+  title: ContactTitle
+  seniority: ContactSeniority
+  department: ContactDepartment
+  company: Company
+  details: ContactDetails
+  emails: [ContactEmail!]
+  phones: [ContactPhone!]
+  verification: ContactVerification
+  linkedInUrl: URL
+  twitterHandle: String
+  location: Address
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+"""Extended contact data including social profiles and enrichment metadata."""
+type ContactDetails {
+  contactId: ID!
+  bio: String
+  yearsOfExperience: Int
+  previousCompanies: [Company!]
+  linkedInConnections: Int
+  lastActivityDate: Date
+  intentSignals: [String!]
+  gdprLawfulBasis: String
+  optedOut: Boolean
+  dataSource: String
+  confidenceScore: Float
+}
+
+"""Email address record for a contact."""
+type ContactEmail {
+  id: ID!
+  contactId: ID!
+  email: EmailAddress!
+  type: ContactEmailType!
+  isPrimary: Boolean!
+  verificationStatus: VerificationStatus!
+  deliverability: String
+  gdprOptOut: Boolean
+  lastVerified: DateTime
+}
+
+"""Phone number record for a contact."""
+type ContactPhone {
+  id: ID!
+  contactId: ID!
+  phone: PhoneNumber!
+  type: PhoneType!
+  isPrimary: Boolean!
+  isDiamondData: Boolean!
+  verificationStatus: VerificationStatus!
+  countryCode: CountryCode
+  carrier: String
+  lineType: String
+  gdprOptOut: Boolean
+  lastVerified: DateTime
+}
+
+"""Aggregate verification status for a contact record."""
+type ContactVerification {
+  contactId: ID!
+  overallScore: Float!
+  emailVerified: Boolean!
+  phoneVerified: Boolean!
+  lastVerifiedAt: DateTime
+  verifiedFieldsCount: Int!
+  totalFieldsCount: Int!
+}
+
+"""Normalized job title for a contact."""
+type ContactTitle {
+  raw: String!
+  normalized: String
+  roleClassification: String
+}
+
+"""Seniority classification for a contact."""
+type ContactSeniority {
+  level: SeniorityLevel!
+  label: String!
+}
+
+"""Department classification for a contact."""
+type ContactDepartment {
+  type: DepartmentType!
+  label: String!
+  subDepartment: String
+}
+
+# ──────────────────────────────────────────────
+# Company Types
+# ──────────────────────────────────────────────
+
+"""Core company entity with firmographic summary."""
+type Company {
+  id: ID!
+  name: String!
+  domain: String
+  website: URL
+  type: CompanyType
+  size: CompanySize
+  revenue: CompanyRevenue
+  industry: CompanyIndustry
+  keywords: [CompanyKeyword!]
+  technologies: [CompanyTechnology!]
+  locations: [CompanyLocation!]
+  headquartersAddress: Address
+  funding: FundingDetails
+  details: CompanyDetails
+  linkedInUrl: URL
+  twitterHandle: String
+  stockTicker: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+"""Extended company data including description and growth signals."""
+type CompanyDetails {
+  companyId: ID!
+  description: String
+  foundedYear: Int
+  employeeGrowthRate: Float
+  intentSignals: [String!]
+  techStack: [Tech!]
+  parentCompany: Company
+  subsidiaries: [Company!]
+  dataSource: String
+  confidenceScore: Float
+}
+
+"""Employee count range and headcount signals."""
+type CompanySize {
+  min: Int
+  max: Int
+  label: String!
+  exactCount: Int
+  growthPercentage: Float
+  growthPeriodMonths: Int
+}
+
+"""Annual revenue range for a company."""
+type CompanyRevenue {
+  min: Float
+  max: Float
+  currency: CurrencyCode!
+  label: String!
+  year: Int
+}
+
+"""Industry classification for a company."""
+type CompanyIndustry {
+  primary: String!
+  secondary: [String!]
+  naicsCode: String
+  sicCode: String
+  verticals: [String!]
+}
+
+"""Organization type classification."""
+type CompanyType {
+  type: CompanyTypeEnum!
+  label: String!
+}
+
+"""Keyword or tag associated with a company."""
+type CompanyKeyword {
+  id: ID!
+  companyId: ID!
+  keyword: String!
+  relevanceScore: Float
+}
+
+"""Technology product detected as in-use at a company."""
+type CompanyTechnology {
+  id: ID!
+  companyId: ID!
+  tech: Tech!
+  detectedAt: Date
+  confidence: Float
+}
+
+"""Technology category grouping."""
+type TechCategory {
+  id: ID!
+  name: String!
+  type: TechCategoryType!
+  description: String
+}
+
+"""Individual technology product."""
+type Tech {
+  id: ID!
+  name: String!
+  vendor: String
+  category: TechCategory!
+  website: URL
+  description: String
+}
+
+"""Office or facility location linked to a company."""
+type CompanyLocation {
+  id: ID!
+  companyId: ID!
+  address: Address!
+  isHeadquarters: Boolean!
+  employeeCount: Int
+  locationType: String
+}
+
+"""Structured postal address."""
+type Address {
+  street1: String
+  street2: String
+  city: String
+  state: String
+  postalCode: String
+  country: String
+  countryCode: CountryCode
+  latitude: Float
+  longitude: Float
+  region: String
+}
+
+# ──────────────────────────────────────────────
+# Funding Types
+# ──────────────────────────────────────────────
+
+"""Aggregate funding summary for a company."""
+type FundingDetails {
+  companyId: ID!
+  totalRaised: Float
+  currency: CurrencyCode
+  lastRoundType: FundingRoundType
+  lastRoundDate: Date
+  lastRoundAmount: Float
+  roundsCount: Int
+  rounds: [Funding!]
+  investors: [Investor!]
+}
+
+"""Individual funding event."""
+type Funding {
+  id: ID!
+  companyId: ID!
+  round: FundingRound!
+  amount: Float
+  currency: CurrencyCode
+  date: Date
+  investors: [Investor!]
+  announcedAt: Date
+  source: URL
+}
+
+"""Funding round classification."""
+type FundingRound {
+  type: FundingRoundType!
+  label: String!
+  seriesNumber: String
+}
+
+"""Investor entity."""
+type Investor {
+  id: ID!
+  name: String!
+  type: InvestorType!
+  website: URL
+  linkedInUrl: URL
+  portfolioSize: Int
+  leadInvestor: Boolean
+}
+
+# ──────────────────────────────────────────────
+# Search Types
+# ──────────────────────────────────────────────
+
+"""Filter criteria for contact or company searches."""
+input SearchFilter {
+  keywords: [String!]
+  industries: [String!]
+  companyTypes: [CompanyTypeEnum!]
+  companySizeMin: Int
+  companySizeMax: Int
+  revenueMin: Float
+  revenueMax: Float
+  seniorityLevels: [SeniorityLevel!]
+  departments: [DepartmentType!]
+  jobTitles: [String!]
+  countries: [CountryCode!]
+  states: [String!]
+  cities: [String!]
+  technologies: [String!]
+  fundingRounds: [FundingRoundType!]
+  hasVerifiedEmail: Boolean
+  hasVerifiedPhone: Boolean
+  hasDiamondData: Boolean
+  intentTopics: [String!]
+  excludeOptedOut: Boolean
+}
+
+"""Paginated search response."""
+type SearchResults {
+  contacts: [Contact!]
+  companies: [Company!]
+  totalCount: Int!
+  page: Int!
+  limit: Int!
+  hasNextPage: Boolean!
+  query: SearchQuery
+}
+
+"""Saved or submitted search query."""
+type SearchQuery {
+  id: ID!
+  name: String
+  filter: JSON
+  contactCount: Int
+  companyCount: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  createdBy: String
+}
+
+# ──────────────────────────────────────────────
+# Enrichment Types
+# ──────────────────────────────────────────────
+
+"""Top-level enrichment request."""
+type Enrichment {
+  id: ID!
+  type: String!
+  inputIdentifiers: JSON!
+  status: String!
+  result: EnrichmentDetails
+  createdAt: DateTime
+  completedAt: DateTime
+}
+
+"""Metadata about an enrichment operation."""
+type EnrichmentDetails {
+  enrichmentId: ID!
+  matchConfidence: Float!
+  fieldsPopulated: [String!]!
+  fieldsRequested: [String!]!
+  matchMethod: String
+  processingTimeMs: Int
+}
+
+"""Enrichment result for a single contact."""
+type ContactEnrichment {
+  id: ID!
+  inputEmail: EmailAddress
+  inputLinkedInUrl: URL
+  inputName: String
+  inputCompany: String
+  matchedContact: Contact
+  matchScore: Float!
+  fieldsEnriched: [String!]!
+  emailVerification: EmailVerification
+  phoneVerification: PhoneVerification
+  enrichedAt: DateTime
+}
+
+"""Enrichment result for a single company."""
+type CompanyEnrichment {
+  id: ID!
+  inputDomain: String
+  inputName: String
+  matchedCompany: Company
+  matchScore: Float!
+  fieldsEnriched: [String!]!
+  enrichedAt: DateTime
+}
+
+"""Phone number verification result."""
+type PhoneVerification {
+  id: ID!
+  phone: PhoneNumber!
+  status: VerificationStatus!
+  lineType: String
+  carrier: String
+  isDiamondData: Boolean!
+  countryCode: CountryCode
+  reachable: Boolean
+  verifiedAt: DateTime
+}
+
+"""Email address verification result."""
+type EmailVerification {
+  id: ID!
+  email: EmailAddress!
+  status: VerificationStatus!
+  syntaxValid: Boolean!
+  mxValid: Boolean!
+  deliverable: Boolean
+  isCatchAll: Boolean
+  isDisposable: Boolean
+  isRoleAddress: Boolean
+  verifiedAt: DateTime
+}
+
+"""Batch enrichment job submission."""
+type BulkEnrichment {
+  jobId: ID!
+  status: BulkJobStatus!
+  recordsSubmitted: Int!
+  recordsProcessed: Int
+  recordsMatched: Int
+  submittedAt: DateTime
+  estimatedCompletionAt: DateTime
+}
+
+"""Batch enrichment job results."""
+type BulkResults {
+  jobId: ID!
+  status: BulkJobStatus!
+  totalRecords: Int!
+  matchedRecords: Int!
+  failedRecords: Int!
+  contacts: [ContactEnrichment!]
+  companies: [CompanyEnrichment!]
+  completedAt: DateTime
+  downloadUrl: URL
+}
+
+# ──────────────────────────────────────────────
+# List and Segment Types
+# ──────────────────────────────────────────────
+
+"""Named list of contacts or companies."""
+type List {
+  id: ID!
+  details: ListDetails!
+  contacts: [ListContact!]
+  contactCount: Int!
+}
+
+"""Metadata about a prospect list."""
+type ListDetails {
+  listId: ID!
+  name: String!
+  description: String
+  owner: String
+  isShared: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  recordCount: Int!
+  tags: [String!]
+}
+
+"""Junction type linking a contact to a list."""
+type ListContact {
+  id: ID!
+  listId: ID!
+  contact: Contact!
+  addedAt: DateTime!
+  addedBy: String
+  notes: String
+}
+
+"""Metadata about a saved audience segment."""
+type SegmentDetails {
+  segmentId: ID!
+  name: String!
+  description: String
+  isDynamic: Boolean!
+  filterSnapshot: JSON
+  owner: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  recordCount: Int!
+}
+
+"""Dynamic or static segment of contacts or companies."""
+type Segment {
+  id: ID!
+  details: SegmentDetails!
+  contacts: [Contact!]
+  companies: [Company!]
+  contactCount: Int!
+  companyCount: Int!
+}
+
+# ──────────────────────────────────────────────
+# CRM Integration Types
+# ──────────────────────────────────────────────
+
+"""Base CRM integration record."""
+type CRMIntegration {
+  id: ID!
+  name: String!
+  status: IntegrationStatus!
+  syncFrequency: SyncFrequency!
+  lastSyncAt: DateTime
+  nextSyncAt: DateTime
+  fieldMappings: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Salesforce integration configuration."""
+type SalesforceIntegration {
+  id: ID!
+  instanceUrl: URL!
+  organizationId: String!
+  status: IntegrationStatus!
+  syncFrequency: SyncFrequency!
+  contactFieldMappings: JSON
+  accountFieldMappings: JSON
+  leadFieldMappings: JSON
+  syncContacts: Boolean!
+  syncAccounts: Boolean!
+  syncLeads: Boolean!
+  lastSyncAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""HubSpot integration configuration."""
+type HubSpotIntegration {
+  id: ID!
+  portalId: String!
+  status: IntegrationStatus!
+  syncFrequency: SyncFrequency!
+  contactPropertyMappings: JSON
+  companyPropertyMappings: JSON
+  syncContacts: Boolean!
+  syncCompanies: Boolean!
+  lastSyncAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Outreach.io integration configuration."""
+type OutreachIntegration {
+  id: ID!
+  organizationId: String!
+  status: IntegrationStatus!
+  sequencePushRules: JSON
+  fieldMappings: JSON
+  autoEnrollInSequence: Boolean!
+  defaultSequenceId: String
+  lastSyncAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Salesloft integration configuration."""
+type SalesloftIntegration {
+  id: ID!
+  teamId: String!
+  status: IntegrationStatus!
+  cadenceAssignmentRules: JSON
+  fieldMappings: JSON
+  autoAssignCadence: Boolean!
+  defaultCadenceId: String
+  lastSyncAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ──────────────────────────────────────────────
+# Webhook Types
+# ──────────────────────────────────────────────
+
+"""Registered webhook endpoint."""
+type Webhook {
+  id: ID!
+  url: URL!
+  isActive: Boolean!
+  eventTypes: [WebhookEventType!]!
+  secret: String
+  description: String
+  failureCount: Int!
+  lastTriggeredAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Delivered webhook event payload."""
+type WebhookEvent {
+  id: ID!
+  webhookId: ID!
+  eventType: WebhookEventType!
+  payload: JSON!
+  deliveredAt: DateTime!
+  responseStatusCode: Int
+  retryCount: Int!
+  success: Boolean!
+}
+
+# ──────────────────────────────────────────────
+# Authentication Types
+# ──────────────────────────────────────────────
+
+"""API key credential."""
+type APIKey {
+  id: ID!
+  name: String!
+  keyPrefix: String!
+  scopes: [KeyScope!]!
+  isActive: Boolean!
+  createdAt: DateTime!
+  expiresAt: DateTime
+  lastUsedAt: DateTime
+  createdBy: String
+}
+
+"""Bearer token for API authentication."""
+type Token {
+  id: ID!
+  token: String!
+  scopes: [KeyScope!]!
+  expiresAt: DateTime!
+  issuedAt: DateTime!
+  apiKeyId: ID
+}
+
+# ──────────────────────────────────────────────
+# Input Types
+# ──────────────────────────────────────────────
+
+input ContactEnrichmentInput {
+  email: EmailAddress
+  linkedInUrl: URL
+  firstName: String
+  lastName: String
+  companyName: String
+  companyDomain: String
+}
+
+input CompanyEnrichmentInput {
+  domain: String
+  name: String
+  linkedInUrl: URL
+}
+
+input BulkEnrichmentInput {
+  contacts: [ContactEnrichmentInput!]
+  companies: [CompanyEnrichmentInput!]
+  webhookUrl: URL
+  callbackJobId: String
+}
+
+input ListInput {
+  name: String!
+  description: String
+  isShared: Boolean
+  tags: [String!]
+}
+
+input SegmentInput {
+  name: String!
+  description: String
+  isDynamic: Boolean!
+  filter: SearchFilter
+}
+
+input WebhookInput {
+  url: URL!
+  eventTypes: [WebhookEventType!]!
+  description: String
+  secret: String
+}
+
+input APIKeyInput {
+  name: String!
+  scopes: [KeyScope!]!
+  expiresAt: DateTime
+}
+
+# ──────────────────────────────────────────────
+# Root Types
+# ──────────────────────────────────────────────
+
+type Query {
+  """Fetch a single contact by ID."""
+  contact(id: ID!): Contact
+
+  """Search contacts with filters and pagination."""
+  contacts(filter: SearchFilter, page: Int, limit: Int): SearchResults!
+
+  """Fetch a single company by ID."""
+  company(id: ID!): Company
+
+  """Fetch a company by domain."""
+  companyByDomain(domain: String!): Company
+
+  """Search companies with filters and pagination."""
+  companies(filter: SearchFilter, page: Int, limit: Int): SearchResults!
+
+  """Enrich a contact by email, LinkedIn URL, or name and company."""
+  enrichContact(input: ContactEnrichmentInput!): ContactEnrichment
+
+  """Enrich a company by domain or name."""
+  enrichCompany(input: CompanyEnrichmentInput!): CompanyEnrichment
+
+  """Verify a phone number."""
+  verifyPhone(phone: PhoneNumber!): PhoneVerification
+
+  """Verify an email address."""
+  verifyEmail(email: EmailAddress!): EmailVerification
+
+  """Poll the status of a bulk enrichment job."""
+  bulkEnrichStatus(jobId: ID!): BulkEnrichment
+
+  """Fetch bulk enrichment results after job completion."""
+  bulkEnrichResults(jobId: ID!): BulkResults
+
+  """Fetch a prospect list by ID."""
+  list(id: ID!): List
+
+  """List all saved prospect lists."""
+  lists(page: Int, limit: Int): [List!]!
+
+  """Fetch a saved segment by ID."""
+  segment(id: ID!): Segment
+
+  """List all saved segments."""
+  segments(page: Int, limit: Int): [Segment!]!
+
+  """List CRM integrations."""
+  crmIntegrations: [CRMIntegration!]!
+
+  """Get Salesforce integration details."""
+  salesforceIntegration: SalesforceIntegration
+
+  """Get HubSpot integration details."""
+  hubSpotIntegration: HubSpotIntegration
+
+  """Get Outreach integration details."""
+  outreachIntegration: OutreachIntegration
+
+  """Get Salesloft integration details."""
+  salesloftIntegration: SalesloftIntegration
+
+  """List registered webhook endpoints."""
+  webhooks: [Webhook!]!
+
+  """Fetch a webhook by ID."""
+  webhook(id: ID!): Webhook
+
+  """List webhook delivery events."""
+  webhookEvents(webhookId: ID!, page: Int, limit: Int): [WebhookEvent!]!
+
+  """List API keys for the authenticated account."""
+  apiKeys: [APIKey!]!
+}
+
+type Mutation {
+  """Submit a batch enrichment job."""
+  submitBulkEnrichment(input: BulkEnrichmentInput!): BulkEnrichment!
+
+  """Create a new prospect list."""
+  createList(input: ListInput!): List!
+
+  """Delete a prospect list."""
+  deleteList(id: ID!): Boolean!
+
+  """Add a contact to a list."""
+  addContactToList(listId: ID!, contactId: ID!): ListContact!
+
+  """Remove a contact from a list."""
+  removeContactFromList(listId: ID!, contactId: ID!): Boolean!
+
+  """Create a new audience segment."""
+  createSegment(input: SegmentInput!): Segment!
+
+  """Update a saved segment."""
+  updateSegment(id: ID!, input: SegmentInput!): Segment!
+
+  """Delete a segment."""
+  deleteSegment(id: ID!): Boolean!
+
+  """Register a new webhook endpoint."""
+  registerWebhook(input: WebhookInput!): Webhook!
+
+  """Update a registered webhook."""
+  updateWebhook(id: ID!, input: WebhookInput!): Webhook!
+
+  """Delete a registered webhook."""
+  deleteWebhook(id: ID!): Boolean!
+
+  """Generate a new API key."""
+  createAPIKey(input: APIKeyInput!): APIKey!
+
+  """Revoke an existing API key."""
+  revokeAPIKey(id: ID!): Boolean!
+}

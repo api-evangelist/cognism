@@ -2,85 +2,85 @@ aid: cognism
 url: https://raw.githubusercontent.com/api-evangelist/cognism/refs/heads/main/apis.yml
 name: Cognism
 kind: company
-description: >-
-  Cognism is a B2B sales intelligence platform providing verified emails, mobile numbers (Diamond
-  Data), firmographic data, intent signals, and enrichment. Cognism exposes APIs for enrichment and
-  integration but they are gated and not publicly self-serve; access is granted to enterprise
-  customers via partnerships and integrations.
+description: Cognism is a B2B sales intelligence platform providing verified emails,
+  mobile numbers (Diamond Data), firmographic data, intent signals, and enrichment.
+  Cognism exposes APIs for enrichment and integration but they are gated and not publicly
+  self-serve; access is granted to enterprise customers via partnerships and integrations.
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Sales Intelligence
-  - B2B
-  - Enrichment
-  - Contact Data
-  - GDPR
-  - Intent Data
+- Sales Intelligence
+- B2B
+- Enrichment
+- Contact Data
+- GDPR
+- Intent Data
 created: '2026-05-08'
 modified: '2026-05-08'
 specificationVersion: '0.19'
 apis:
-  - aid: cognism:enrichment
-    name: Cognism Enrichment API
-    description: >-
-      REST API for enriching CRM records with contact and company data, including verified emails, phone
-      numbers, job titles, and firmographics. Available to enterprise Cognism customers; endpoints and
-      quotas are configured per contract.
-    humanURL: https://www.cognism.com/api
-    baseURL: https://api.cognism.com
-    tags:
-      - Enrichment
-      - Contacts
-      - Companies
-    properties:
-      - type: Documentation
-        url: https://www.cognism.com/api
-      - type: ContactSales
-        url: https://www.cognism.com/contact
-common:
-  - type: GitHubOrganization
-    url: https://github.com/Cognism
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/cognism
-  - type: Website
-    url: https://www.cognism.com/
-  - type: DeveloperPortal
+- aid: cognism:enrichment
+  name: Cognism Enrichment API
+  description: REST API for enriching CRM records with contact and company data, including
+    verified emails, phone numbers, job titles, and firmographics. Available to enterprise
+    Cognism customers; endpoints and quotas are configured per contract.
+  humanURL: https://www.cognism.com/api
+  baseURL: https://api.cognism.com
+  tags:
+  - Enrichment
+  - Contacts
+  - Companies
+  properties:
+  - type: Documentation
     url: https://www.cognism.com/api
-  - type: Plans
-    url: plans/cognism-plans-pricing.yml
-  - type: RateLimits
-    url: rate-limits/cognism-rate-limits.yml
-  - type: FinOps
-    url: finops/cognism-finops.yml
-  - type: Integrations
-    url: https://www.cognism.com/integrations
+  - type: ContactSales
+    url: https://www.cognism.com/contact
+  - url: graphql/cognism-graphql.md
+    type: GraphQL
+common:
+- type: GitHubOrganization
+  url: https://github.com/Cognism
+- type: LinkedIn
+  url: https://www.linkedin.com/company/cognism
+- type: Website
+  url: https://www.cognism.com/
+- type: DeveloperPortal
+  url: https://www.cognism.com/api
+- type: Plans
+  url: plans/cognism-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/cognism-rate-limits.yml
+- type: FinOps
+  url: finops/cognism-finops.yml
+- type: Integrations
+  url: https://www.cognism.com/integrations
 integrations:
-  - name: cognism-logo-2026
-  - name: arrow
-  - name: Salesforce-logo-SF-lightening-partner
-  - name: zapier
-  - name: pd-white
-  - name: OutreachLogo-Horizontal-PassionBlueWhite
-  - name: hs-white
-  - name: bullhorn-white
-  - name: Salesloft-white
-  - name: ms-dynamics
-  - name: salesforce-2
-  - name: HubSpot-Logo
-  - name: Pipedrive-2
-  - name: bh-logo
-  - name: Dynamics-365-logo-1536x864
-  - name: Salesloft-logo-removebg-preview
-  - name: OutreachLogo-Horizontal-PassionBlueGrey
-  - name: Cognism_Infographic 5 (Dark)
-  - name: Simpleshow---company-logo-white-rectangle-1
-  - name: Simpleshow-1
-  - name: lead forensics-3
-  - name: Lead Forensics
-  - name: Coralogix---company-logo-white-rectangle
-  - name: Logos 130x26px_Coralogix (1)
-  - name: Televerde-logo-transparent-white-1
-  - name: Televerde-logo-transparent-colour-1
-  - name: cognism-logo-white
+- name: cognism-logo-2026
+- name: arrow
+- name: Salesforce-logo-SF-lightening-partner
+- name: zapier
+- name: pd-white
+- name: OutreachLogo-Horizontal-PassionBlueWhite
+- name: hs-white
+- name: bullhorn-white
+- name: Salesloft-white
+- name: ms-dynamics
+- name: salesforce-2
+- name: HubSpot-Logo
+- name: Pipedrive-2
+- name: bh-logo
+- name: Dynamics-365-logo-1536x864
+- name: Salesloft-logo-removebg-preview
+- name: OutreachLogo-Horizontal-PassionBlueGrey
+- name: Cognism_Infographic 5 (Dark)
+- name: Simpleshow---company-logo-white-rectangle-1
+- name: Simpleshow-1
+- name: lead forensics-3
+- name: Lead Forensics
+- name: Coralogix---company-logo-white-rectangle
+- name: Logos 130x26px_Coralogix (1)
+- name: Televerde-logo-transparent-white-1
+- name: Televerde-logo-transparent-colour-1
+- name: cognism-logo-white
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
