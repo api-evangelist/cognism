@@ -37,6 +37,12 @@ apis:
   - url: graphql/cognism-graphql.md
     type: GraphQL
 common:
+- type: TrustCenter
+  url: security/cognism-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/cognism-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/cognism-domain-security.yml
 - type: GitHubOrganization
   url: https://github.com/Cognism
 - type: LinkedIn
@@ -53,6 +59,8 @@ common:
   url: finops/cognism-finops.yml
 - type: Integrations
   url: https://www.cognism.com/integrations
+- url: https://www.cognism.com/blog/rss.xml
+  type: Blog
 integrations:
 - name: cognism-logo-2026
 - name: arrow
