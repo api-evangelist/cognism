@@ -6,7 +6,19 @@ description: Cognism is a B2B sales intelligence platform providing verified ema
   mobile numbers (Diamond Data), firmographic data, intent signals, and enrichment.
   Cognism exposes APIs for enrichment and integration but they are gated and not publicly
   self-serve; access is granted to enterprise customers via partnerships and integrations.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cognism.png
 tags:
 - Sales Intelligence
 - B2B
