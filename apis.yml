@@ -2,22 +2,40 @@ aid: cognism
 url: https://raw.githubusercontent.com/api-evangelist/cognism/refs/heads/main/apis.yml
 name: Cognism
 kind: company
-description: Cognism is a B2B sales intelligence platform providing verified emails,
-  mobile numbers (Diamond Data), firmographic data, intent signals, and enrichment.
-  Cognism exposes APIs for enrichment and integration but they are gated and not publicly
-  self-serve; access is granted to enterprise customers via partnerships and integrations.
+description: >-
+  Cognism is a B2B sales intelligence platform selling verified emails, mobile
+  numbers, direct dials, firmographic and technographic data, buying-intent signals and
+  contact enrichment to sales, marketing and RevOps teams, with a compliance-first posture
+  built around GDPR and CCPA. Its API is a three-service REST contract published as a Postman
+  collection at developers.cognism.com — a Search API for finding contacts and companies by
+  filter, an Enrich API for matching records you already hold, and a Redeem API for exchanging
+  the resulting redeem ID for the full profile. Search and Enrich return preview records and
+  cost nothing; credits are consumed only when a contact is redeemed for the first time. A
+  Compliance API exposes the opt-out suppression list, and an Entitlement API reports which
+  fields the account is licensed to receive. API access is sales-gated: it must be enabled on
+  the subscription, field-level entitlements provisioned by Cognism, and a six-month bearer
+  token generated in the application.
 accessModel:
-  pricing: unknown
-  onboarding: unknown
+  pricing: sales-led
+  onboarding: sales-gated
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
+  docs_public: true
+  label: Sales-gated
+  confidence: high
   source:
-  - plans
-  generated: '2026-07-22'
-  method: derived
+  - https://www.cognism.com/pricing
+  - https://help.cognism.com/hc/en-gb/articles/37383359556498-API-Requirements-Entitlements
+  - https://developers.cognism.com/
+  note: >-
+    Documentation is fully public — the developer portal, the complete API reference and the help
+    centre are all readable without an account. Access is not. API use requires the subscription to
+    include API access (the Data-as-a-Service product, which itself requires a prospecting seat),
+    field-level Entitlements provisioned by the Cognism team after Account Manager approval, and a
+    token minted in the app. No prices, no free tier, no trial and no self-serve signup are published.
+  generated: '2026-08-13'
+  method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cognism.png
 tags:
 - Sales Intelligence
@@ -26,35 +44,85 @@ tags:
 - Contact Data
 - GDPR
 - Intent Data
+- Lead Generation
+- Firmographics
+- Technographics
+- Company Data
+- Prospecting
+- Data as a Service
 created: '2026-05-08'
-modified: '2026-05-08'
+modified: '2026-08-13'
 specificationVersion: '0.19'
 apis:
 - aid: cognism:enrichment
   name: Cognism Enrichment API
-  description: REST API for enriching CRM records with contact and company data, including
-    verified emails, phone numbers, job titles, and firmographics. Available to enterprise
-    Cognism customers; endpoints and quotas are configured per contract.
-  humanURL: https://www.cognism.com/api
-  baseURL: https://api.cognism.com
+  description: The Cognism API — Search, Enrich, Redeem, Entitlement, Filter and Compliance
+    endpoints for B2B contact and company data. Search finds records by filter and Enrich
+    matches records you already hold; both return previews with a redeem ID and cost nothing.
+    Redeem exchanges that ID for the full profile and consumes a credit on a contact's first
+    redemption. Fourteen Filter endpoints publish the controlled vocabularies the search
+    filters accept, and the Compliance endpoints expose the GDPR/CCPA opt-out suppression list.
+  humanURL: https://developers.cognism.com/
+  baseURL: https://app.cognism.com
   tags:
   - Enrichment
   - Contacts
   - Companies
+  - Search
+  - Compliance
   properties:
+  - type: OpenAPI
+    url: openapi/cognism-api-openapi.yml
+  - type: Postman
+    url: https://developers.cognism.com/
+  - type: APIReference
+    url: https://developers.cognism.com/
   - type: Documentation
-    url: https://www.cognism.com/api
+    url: https://help.cognism.com/hc/en-gb/articles/37382868352914-Cognism-API-Overview
+  - type: GettingStarted
+    url: https://help.cognism.com/hc/en-gb/articles/34195245226258-How-to-Generate-an-API-Token
+  - type: Authentication
+    url: https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+  - type: Overlay
+    url: overlays/cognism-api-overlay.yaml
+  - type: ErrorCatalog
+    url: errors/cognism-problem-types.yml
+  - type: DataModel
+    url: data-model/cognism-data-model.yml
+  - type: Examples
+    url: examples/_index.yml
+  # NO MCPServer pointer: mcp/cognism-mcp.yml records deployment.mode = none. Cognism ships no
+  # MCP server; the tools[] list there is a derived candidate. Pointing at it would credit an
+  # agent surface that does not exist.
   - type: ContactSales
     url: https://www.cognism.com/contact
-  - url: graphql/cognism-graphql.md
-    type: GraphQL
 common:
+- type: AgenticAccess
+  url: agentic-access/cognism-agentic-access.yml
+- type: Authentication
+  url: authentication/cognism-authentication.yml
 - type: TrustCenter
   url: security/cognism-trust-center.yml
 - type: VulnerabilityDisclosure
   url: security/cognism-vulnerability-disclosure.yml
 - type: DomainSecurity
   url: security/cognism-domain-security.yml
+- type: Security
+  url: https://www.cognism.com/security
+- type: Compliance
+  url: https://www.cognism.com/compliance
+- type: Conformance
+  url: conformance/cognism-conformance.yml
+- type: Conventions
+  url: conventions/cognism-conventions.yml
+- type: Lifecycle
+  url: lifecycle/cognism-lifecycle.yml
+- type: Packages
+  url: packages/cognism-packages.yml
+- type: LLMsTxt
+  url: llms/cognism-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
 - type: GitHubOrganization
   url: https://github.com/Cognism
 - type: LinkedIn
@@ -62,7 +130,19 @@ common:
 - type: Website
   url: https://www.cognism.com/
 - type: DeveloperPortal
-  url: https://www.cognism.com/api
+  url: https://developers.cognism.com/
+- type: Support
+  url: https://help.cognism.com/hc/en-gb
+- type: Pricing
+  url: https://www.cognism.com/pricing
+- type: SignUp
+  url: https://www.cognism.com/demo
+- type: Login
+  url: https://app.cognism.com/auth/sign-in
+- type: TermsOfService
+  url: https://www.cognism.com/terms-of-website-use
+- type: PrivacyPolicy
+  url: https://www.cognism.com/privacy-policy
 - type: Plans
   url: plans/cognism-plans-pricing.yml
 - type: RateLimits
@@ -73,6 +153,22 @@ common:
   url: https://www.cognism.com/integrations
 - url: https://www.cognism.com/blog/rss.xml
   type: Blog
+# DELIBERATE ABSENCES — recorded so a later round does not "fix" them by inventing a pointer:
+#   no SDKs        — packages/cognism-packages.yml found zero first-party client libraries
+#                    across eight registries and the GitHub org.
+#   no Idempotency — conventions/cognism-conventions.yml records idempotency.supported: false.
+#                    Cognism publishes no idempotency key or replay contract.
+#   no WellKnown / SecurityTxt — well-known/cognism-well-known.yml is a 32-path probe that
+#                    returned zero documents on all four hosts.
+#   no StatusPage  — cognism.statuspage.io answers 200 with "Page Inactive … team members only"
+#                    and status.cognism.com returns 500. A soft 200 is not a status page.
+#   no Deprecation — no deprecation or sunset policy is published.
+#   no AgentCard   — /.well-known/agent-card.json and /.well-known/agent.json miss on every host.
+#   no MCPServer   — no first-party MCP server exists; only third-party Zapier/viaSocket wrappers.
+#   no AsyncAPI / Webhooks — Cognism ships no event, webhook or streaming surface at all.
+#   no GraphQL     — the previous "conceptual" GraphQL schema in graphql/ was a fabrication and
+#                    has been removed; Cognism publishes no GraphQL API.
+#   no ChangeLog / CLI / Sandbox / Components — none published.
 integrations:
 - name: cognism-logo-2026
 - name: arrow
@@ -104,3 +200,32 @@ integrations:
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 16
+  artifacts_updated: 6
+  pass: local-v1
+  headline: >-
+    Found the real first-party contract. Cognism publishes its API as a Postman collection at
+    developers.cognism.com (25 operations, published Production environment naming
+    https://app.cognism.com as the base). Saved verbatim, converted to OpenAPI 3.1, and used to
+    ground 16 artifacts. Also corrected the baseURL, replaced a dead developer-portal link, and
+    removed a fabricated "conceptual" GraphQL schema that credited Cognism with an API it has never
+    shipped.
+x-coverage:
+  state: covered
+  reason: null
+  detail: >-
+    Contract discovery beat the JS-rendered docs host. developers.cognism.com is a Postman
+    Documenter publication, not a spec site — the real, first-party, machine-readable Cognism API
+    collection (25 operations, published Production environment) was pulled from
+    documenter.gw.postman.com/api/collections/14862827/UVJhBu4C and converted to OpenAPI 3.1.
+  evidence:
+  - url: https://developers.cognism.com/
+    status: 200
+  - url: https://documenter.gw.postman.com/api/collections/14862827/UVJhBu4C
+    status: 200
+  - url: https://www.cognism.com/api
+    status: 404
+  checked: '2026-08-13'
