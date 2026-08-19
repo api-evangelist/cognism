@@ -52,7 +52,7 @@ tags:
 - Data as a Service
 created: '2026-05-08'
 modified: '2026-08-13'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: cognism:enrichment
   name: Cognism Enrichment API
