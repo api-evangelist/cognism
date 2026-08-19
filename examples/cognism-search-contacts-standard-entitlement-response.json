@@ -1,0 +1,45 @@
+{
+  "lastReturnedKey": "1714687499208_~34d633b7-41ea-3ac7-a280-431d71fd77eb",
+  "totalResults": 1,
+  "results": [
+    {
+      "id": "34d633b7-41ea-3ac7-a280-431d71fd77eb",
+      "firstName": "Stjepan",
+      "jobTitle": "Chief Innovation Officer",
+      "account": {
+        "name": "Cognism",
+        "id": "efc6d975-8599-38ab-8cfe-e1c42ac16dc6",
+        "hasHeadcount": true,
+        "hasSize": true,
+        "hasTechnologies": true,
+        "hasType": true,
+        "hasDomain": true,
+        "hasRevenue": true,
+        "hasWebsite": true,
+        "hasFounded": true,
+        "hasNaics": true,
+        "hasIsic": false,
+        "hasSic": true,
+        "hasShortDescription": true,
+        "hasDescription": true
+      },
+      "lastName": "Buljat",
+      "fullName": "Stjepan Buljat",
+      "hasSkills": true,
+      "hasLinkedinUrl": true,
+      "hasEmail": true,
+      "hasEducation": true,
+      "hasZip": false,
+      "hasState": false,
+      "hasCountry": true,
+      "hasCity": false,
+      "hasStreet": false,
+      "hasPositionStartDate": true,
+      "hasSeniority": false,
+      "hasJobFunction": true,
+      "hasManagementLevel": true,
+      "hasLastConfirmed": true,
+      "redeemId": "MzRkNjMzYjctNDFlYS0zYWM3LWEyODAtNDMxZDcxZmQ3N2ViO2IxMjBjOTdhLTlhNTItM2E3Zi1iNzNiLTg3MGUzYjQ0M2MxOTtlZmM2ZDk3NS04NTk5LTM4YWItOGNmZS1lMWM0MmFjMTZkYzY="
+    }
+  ]
+}

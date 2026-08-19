@@ -1,0 +1,14 @@
+{
+  "names": [
+    "Cognism"
+  ],
+  "domains": [
+    "cognism.com"
+  ],
+  "accountSearchOptions": {
+    "match_exact_account_name": true,
+    "match_exact_domain": false,
+    "filter_domain": "exists",
+    "events_operator": "AND"
+  }
+}

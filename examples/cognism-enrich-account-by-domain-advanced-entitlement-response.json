@@ -1,0 +1,28 @@
+{
+  "matchScore": 45,
+  "results": [
+    {
+      "id": "efc6d975-8599-38ab-8cfe-e1c42ac16dc6",
+      "name": "Cognism",
+      "hasDomain": true,
+      "hasIndustries": true,
+      "hasDescription": true,
+      "hasShortDescription": true,
+      "hasFounded": true,
+      "hasWebsite": true,
+      "hasLinkedinUrl": true,
+      "hasRevenue": true,
+      "hasSic": true,
+      "hasIsic": false,
+      "hasNaics": true,
+      "hasHeadcount": true,
+      "hasSize": true,
+      "hasTechnologies": true,
+      "hasType": true,
+      "hasLocation": true,
+      "hasOfficePhoneNumbers": false,
+      "hasHqPhoneNumbers": true,
+      "hasHiringEvent": false
+    }
+  ]
+}

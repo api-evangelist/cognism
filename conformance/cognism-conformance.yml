@@ -1,0 +1,144 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/cognism-api-openapi.yml, conventions/cognism-conventions.yml,
+  errors/cognism-problem-types.yml, security/cognism-trust-center.yml, and
+  https://www.cognism.com/compliance
+description: >-
+  Which cross-cutting standards the Cognism API conforms to. Derived from the contract Cognism
+  publishes and cross-checked against its public compliance and security pages. Absence is recorded
+  as honestly as presence.
+
+standards:
+- id: rest
+  conforms: true
+  evidence: >-
+    HTTPS endpoints with standard verbs over JSON. Cognism states "The API is built using RESTful
+    endpoints and standard HTTP verbs." Search/Enrich/Redeem are POST because the filter set is a
+    body, not because the API is RPC.
+
+- id: openapi
+  conforms: false
+  evidence: >-
+    Cognism publishes NO OpenAPI. The machine-readable contract it does publish is a Postman
+    Collection v2.0.0 at https://developers.cognism.com/ . The OpenAPI 3.1 in openapi/ was derived
+    from that collection by API Evangelist and is not a provider artifact.
+
+- id: postman-collection-v2
+  conforms: true
+  evidence: >-
+    schema https://schema.getpostman.com/json/collection/v2.0.0/collection.json — the developer
+    portal is a Postman Documenter publication of collection 14862827-58d2e00d-2fc0-4594-89e3-3c6d43bf293d
+    with a published Production environment.
+
+- id: bearer-token-auth
+  conforms: true
+  evidence: 'Authorization: Bearer <token>, documented and required on every operation.'
+
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No OAuth 2.0. Long-lived opaque bearer API tokens with a 6-month TTL, minted in the app. No
+    authorization server, no token endpoint, no refresh, no scopes. Consequently no scopes/ artifact.
+
+- id: oidc
+  conforms: false
+  evidence: No OpenID Connect on the API. /.well-known/openid-configuration 404s on every host.
+
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors are a top-level JSON array of {key, code, msg} with content-type application/json — not
+    application/problem+json, and not even an object.
+
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header support documented or observed; no deprecation policy exists.
+
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404/403 on all four Cognism hosts.
+
+- id: rfc8615-well-known
+  conforms: false
+  evidence: No /.well-known/ documents served. See well-known/cognism-well-known.yml.
+
+- id: api-versioning
+  conforms: false
+  evidence: No version segment, header or date. See lifecycle/cognism-lifecycle.yml.
+
+- id: idempotency-key
+  conforms: false
+  evidence: No idempotency key or replay contract. See conventions/cognism-conventions.yml.
+
+- id: cursor-pagination
+  conforms: true
+  evidence: >-
+    Opaque forward-only cursor (`lastReturnedKey` on search, `pageKey` on the opt-out list) with a
+    page-size parameter. Cognism explicitly states you cannot hop between pages.
+
+- id: rate-limit-headers
+  conforms: false
+  evidence: >-
+    Limits are published in prose (20-100 records/search request, 1-20 redeem IDs/request, 1,000
+    records/minute) but no RateLimit-*, X-RateLimit-* or Retry-After response header is documented.
+
+- id: mcp
+  conforms: false
+  evidence: No first-party Model Context Protocol server. See mcp/cognism-mcp.yml.
+
+- id: a2a-agent-card
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json miss on all four hosts.
+
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No event surface at all — no AsyncAPI, no webhooks, no streaming. Integration with CRMs happens
+    through Cognism's own native connectors, not through customer-facing events. Not a penalty: a
+    provider with no event surface is out of the asyncapi denominator.
+
+- id: graphql
+  conforms: false
+  evidence: >-
+    No GraphQL endpoint. https://api.cognism.com/graphql returns the Cloudflare 403 that every other
+    path returns, and no Cognism documentation mentions GraphQL.
+
+- id: gdpr
+  conforms: true
+  evidence: >-
+    GDPR posture is a headline product claim and is backed by API surface, not just a page: the
+    Compliance API (listOptOutContacts, getOptOutByEmail, getOptOutById) exposes the opt-out
+    suppression list to consumers, and phone numbers carry a `dnc` (Do Not Call) flag.
+    https://www.cognism.com/compliance
+
+- id: ccpa
+  conforms: true
+  evidence: >-
+    North-America-specific disclosures published at
+    https://www.cognism.com/customer-terms/north-america-specific-disclosures ; the same opt-out
+    endpoints serve US suppression.
+
+- id: soc2
+  conforms: true
+  evidence: SOC 2 named on https://www.cognism.com/security
+
+- id: iso27001
+  conforms: true
+  evidence: ISO 27001 named on https://www.cognism.com/security
+
+- id: sso-saml
+  conforms: true
+  evidence: >-
+    SSO is a listed platform feature on the pricing page, and Cognism publishes an Okta integration
+    guide. Applies to the web application, not to API authentication.
+
+summary:
+  conforming: 9
+  non_conforming: 14
+  compliance_program_published: true
+  certifications: [SOC 2, ISO 27001]
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

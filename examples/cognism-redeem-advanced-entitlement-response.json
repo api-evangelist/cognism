@@ -1,0 +1,172 @@
+{
+  "total": 2,
+  "result": [
+    {
+      "id": "e53fa4ed-cc99-385c-b431-38fd6a6a88e0",
+      "name": "Mailtastic",
+      "domain": "mailtastic.com",
+      "industries": [
+        "Marketing and Advertising"
+      ],
+      "description": "Welcome to Mailtastic! Do you know that your clients, contacts and potential customers see your email signature more than they actually see your website or social media accounts? The marketing potential of your email signature is therefore a huge asset that you can use to create diverse marketing campaigns which you share daily as you and your team send your email messages. This is a great marketing goldmine! Mailtastic allows you to centrally manage your employees' email signatures and extend them with marketing banners to transform daily email traffic into a powerful marketing channel. The success of each campaign can be evaluated in the dashboard by means of clicks, impressions and click-rate. At Mailtastic we help you explore the full marketing potential of your email signature to further diversify your marketing efforts and reach new potential customers. Get in touch and we will be happy to show you how it all works!",
+      "shortDescription": "Mailtastic is a solution that allows you to show and analyze marketing messages in your company's e-mail signatures.",
+      "founded": 2015,
+      "website": "www.mailtastic.com",
+      "linkedinUrl": "https://www.linkedin.com/company/mailtastic",
+      "revenue": 60953000,
+      "sizeFrom": 11,
+      "sizeTo": 50,
+      "technologies": [
+        "GDPR",
+        "Mailtastic",
+        "SaaS",
+        "Ai",
+        "MailChimp",
+        "Outbound",
+        "ZipRecruiter",
+        "THINK",
+        "AngularJS",
+        "MySQL",
+        "Salesforce",
+        "Microsoft Dynamics",
+        "Cognism",
+        "Hubspot",
+        "Google Apps for Business",
+        "Linkedin",
+        "Google",
+        "Microsoft Office",
+        "Consensus",
+        "SEO",
+        "Microsoft",
+        "Prospect"
+      ],
+      "type": "Privately Held",
+      "officePhoneNumbers": [
+        {
+          "number": "+4961316338658",
+          "score": 20,
+          "dnc": false,
+          "label": "office"
+        }
+      ],
+      "locations": [
+        {
+          "type": "hq",
+          "country": "Germany",
+          "state": "Rheinland-pfalz",
+          "city": "Mainz",
+          "zip": "55116",
+          "street": "Gro\u00dfe Bleiche 10, 55116 Mainz, Germany"
+        }
+      ]
+    },
+    {
+      "id": "efc6d975-8599-38ab-8cfe-e1c42ac16dc6",
+      "name": "Cognism",
+      "domain": "cognism.com",
+      "industries": [
+        "Computer Software"
+      ],
+      "description": "Cognism is the smart all-in-one marketing and sales acceleration solution. We provide organizations a GDPR compliant way to prospect leads and enrich data. ",
+      "shortDescription": "Cognism is a B2B sales acceleration software company that provides a marketing and sales acceleration solution.",
+      "founded": 2015,
+      "website": "cognism.com",
+      "linkedinUrl": "https://www.linkedin.com/company/cognism/",
+      "revenue": 17000000,
+      "naics": [
+        "5182",
+        "51"
+      ],
+      "sic": [
+        "737",
+        "73"
+      ],
+      "sizeFrom": 201,
+      "sizeTo": 500,
+      "tech": [
+        "Replicated",
+        "Salesforce",
+        "Salesloft",
+        "Lifecycle",
+        "Docker",
+        "GDPR",
+        "Summit",
+        "Matplotlib",
+        "AccuRate",
+        "MongoDB",
+        "Cadence",
+        "Digital Marketing",
+        "Artificial Intelligence",
+        "Intercom",
+        "Java EE",
+        "Yield",
+        "Node",
+        "Retargeting",
+        "Github",
+        "Cognism",
+        "Boost",
+        "Ai",
+        "Onboard",
+        "LiNK",
+        "IBM",
+        "Sandbox",
+        "PostgreSQL",
+        "Office 365 Mail",
+        "Deep Learning",
+        "Websphere",
+        "Gensim",
+        "Achievers",
+        "Hubspot",
+        "Node.js"
+      ],
+      "type": "Public Company",
+      "officePhoneNumbers": [
+        {
+          "number": "+16469719264",
+          "score": 20,
+          "dnc": false,
+          "label": "COMPANY_SWITCHBOARD"
+        }
+      ],
+      "hqPhoneNumbers": [
+        {
+          "number": "442038580822",
+          "score": 20,
+          "dnc": false,
+          "label": "COMPANY_SWITCHBOARD"
+        }
+      ],
+      "location": [
+        {
+          "type": "hq",
+          "country": "United Kingdom",
+          "state": "England",
+          "city": "London",
+          "street": "92 Albert Embankment"
+        },
+        {
+          "type": "office",
+          "country": "United States",
+          "state": "New York",
+          "city": "New York",
+          "zip": "10010",
+          "street": "43 W 23rd St, New York, NY 10010, USA"
+        }
+      ],
+      "companyHiring": [
+        {
+          "employer": "Cognism",
+          "jobTitle": "Product-Led Growth Marketing Manager",
+          "department": "Marketing",
+          "jobDate": "2021-09-14",
+          "country": "United Kingdom",
+          "state": "pariatur amet",
+          "city": "do anim",
+          "url": "https://independentjobs.independent.co.uk/job/27635997/product-led-growth-marketing-manager/",
+          "internship": false,
+          "workFromHome": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/cognism-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - query
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: 'API token issued in the Cognism app under Settings > Tokens and API. Sent as
+    `Authorization: Bearer <token>`. Tokens have a time-to-live of 6 months.'
+  sources:
+  - openapi/cognism-api-openapi.yml
+- name: apiKeyQuery
+  type: apiKey
+  in: query
+  parameter: api_key
+  description: Alternative to the Authorization header. Cognism documents it but recommends
+    the header instead, as the query string is less secure.
+  sources:
+  - openapi/cognism-api-openapi.yml

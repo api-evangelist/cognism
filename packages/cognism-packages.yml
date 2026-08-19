@@ -1,0 +1,43 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, rubygems.org, crates.io, api.github.com/orgs/Cognism,
+  and the Cognism API Postman collection at https://developers.cognism.com/
+description: >-
+  Cognism publishes NO first-party client libraries. Eight public registries and the company GitHub
+  organisation were searched and none carries a Cognism-authored SDK. The Cognism developer portal
+  is a Postman collection: it ships generated request snippets in 31 language/variant combinations
+  (cURL, Python Requests, NodeJs Axios, Java OkHttp, Go Native, C#, PHP, Ruby, Swift and more), which
+  is code you copy rather than a package you install and version.
+  Consumers integrate against the raw REST endpoints. There is no versioned, dated artifact to track,
+  which also means there is no SDK decay signal available for this provider.
+package_count: 0
+official_package_count: 0
+packages: []
+registries_checked:
+- {registry: npm, query: 'cognism, @cognism/sdk, cognism-api, node-cognism + text search', result: none, note: 'All 404; the only text match is an unrelated third-party package.'}
+- {registry: pypi, query: 'cognism, cognism-api, pycognism', result: none, note: All 404.}
+- {registry: rubygems, query: cognism, result: none, note: 404.}
+- {registry: crates.io, query: cognism, result: none, note: 'No crate (registry answered 403 to the unauthenticated probe; no crate is listed on the site either).'}
+- {registry: maven-central, query: cognism, result: none, note: No first-party coordinates published or referenced in the docs.}
+- {registry: nuget, query: cognism, result: none, note: No first-party package published or referenced in the docs.}
+- {registry: pkg.go.dev, query: cognism, result: none, note: No first-party module published or referenced in the docs.}
+- {registry: packagist, query: cognism, result: none, note: No first-party package published or referenced in the docs.}
+github_organisation:
+  url: https://github.com/Cognism
+  public_repo_count: 2
+  note: >-
+    The Cognism GitHub organisation exists but holds no client library. Its two public repos are a
+    fork of openvenues/libpostal (a C address-parsing library) and an archived 2018 AWS CodeBuild
+    shell helper. Neither is a Cognism API SDK.
+code_snippets:
+  source: https://developers.cognism.com/
+  kind: postman-generated
+  languages: [csharp, curl, dart, go, http, java, javascript, c, nodejs, objective-c, ocaml, php,
+    powershell, python, r, ruby, shell, swift]
+  note: >-
+    Postman Documenter renders per-request snippets in these languages. They are copy-paste examples,
+    not installable, versioned packages — no `version:` or `published:` field applies.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

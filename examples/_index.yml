@@ -1,0 +1,211 @@
+generated: '2026-08-13'
+method: searched
+source: https://documenter.gw.postman.com/api/collections/14862827/UVJhBu4C
+description: Request and response examples extracted VERBATIM from the saved examples in the Cognism API
+  Postman collection Cognism publishes at https://developers.cognism.com/. Nothing here was authored by
+  API Evangelist. Most responses come in a Standard Entitlement and an Advanced Entitlement variant, which
+  is the clearest published illustration of how field-level entitlements change the shape of a response.
+example_count: 34
+examples:
+- file: cognism-search-contacts-request.json
+  kind: request
+  operation: Search Contacts
+  folder: Search API
+- file: cognism-search-contacts-advanced-entitlement-response.json
+  kind: response
+  operation: Search Contacts
+  name: Search Contacts Advanced Entitlement
+  status: 200
+  folder: Search API
+- file: cognism-search-contacts-standard-entitlement-response.json
+  kind: response
+  operation: Search Contacts
+  name: Search Contacts Standard Entitlement
+  status: 200
+  folder: Search API
+- file: cognism-search-accounts-request.json
+  kind: request
+  operation: Search Accounts
+  folder: Search API
+- file: cognism-search-account-advanced-entitlement-response.json
+  kind: response
+  operation: Search Accounts
+  name: Search Account Advanced Entitlement
+  status: 200
+  folder: Search API
+- file: cognism-search-account-standard-entitlement-response.json
+  kind: response
+  operation: Search Accounts
+  name: Search Account Standard Entitlement
+  status: 200
+  folder: Search API
+- file: cognism-redeem-contacts-by-ids-request.json
+  kind: request
+  operation: Redeem Contacts by IDs
+  folder: Redeem API
+- file: cognism-redeem-contact-advanced-entitlement-response.json
+  kind: response
+  operation: Redeem Contacts by IDs
+  name: Redeem Contact Advanced Entitlement
+  status: 200
+  folder: Redeem API
+- file: cognism-redeem-contact-standard-entitlement-response.json
+  kind: response
+  operation: Redeem Contacts by IDs
+  name: Redeem Contact Standard Entitlement
+  status: 200
+  folder: Redeem API
+- file: cognism-redeem-accounts-by-ids-request.json
+  kind: request
+  operation: Redeem Accounts by IDs
+  folder: Redeem API
+- file: cognism-redeem-advanced-entitlement-response.json
+  kind: response
+  operation: Redeem Accounts by IDs
+  name: Redeem Advanced Entitlement
+  status: 200
+  folder: Redeem API
+- file: cognism-redeem-standard-entitlement-response.json
+  kind: response
+  operation: Redeem Accounts by IDs
+  name: Redeem Standard Entitlement
+  status: 200
+  folder: Redeem API
+- file: cognism-enrich-contact-request.json
+  kind: request
+  operation: Enrich Contact
+  folder: Enrich API
+- file: cognism-enrich-contact-by-email-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by email Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-email-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by email Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-linkedinurl-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by linkedinUrl Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-linkedinurl-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by linkedinUrl Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-firstname-lastname-and-website-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by firstName, lastName and website Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-firstname-lastname-and-website-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by firstName, lastName and website Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-phonenumber-and-firstname-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by phoneNumber and firstName Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-phonenumber-and-firstname-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by phoneNumber and firstName Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-various-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by various Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-contact-by-various-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Contact
+  name: Enrich Contact by various Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-account-request.json
+  kind: request
+  operation: Enrich Account
+  folder: Enrich API
+- file: cognism-enrich-account-by-website-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Account by website Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-account-by-website-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Account by website Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-account-by-domain-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Account by domain Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-account-by-domain-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Account by domain Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-account-by-linkedinurl-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Account by linkedinUrl Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-account-by-linkedinurl-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Account by linkedinUrl Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-accountby-various-advanced-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Accountby various Advanced Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-enrich-account-by-various-standard-entitlement-response.json
+  kind: response
+  operation: Enrich Account
+  name: Enrich Account by various Standard Entitlement
+  status: null
+  folder: Enrich API
+- file: cognism-contact-advanced-entitlement-response.json
+  kind: response
+  operation: Get Contact Entitlement Details
+  name: Contact Advanced Entitlement
+  status: 200
+  folder: Entitlement API
+- file: cognism-account-advanced-entitlement-response.json
+  kind: response
+  operation: Get Account Entitlement Details
+  name: Account Advanced Entitlement
+  status: 200
+  folder: Entitlement API
+pii_assessment:
+  checked: '2026-08-13'
+  verdict: safe-to-publish
+  detail: Scanned every extracted file. The demo record is Cognism's own CTO, published by Cognism as
+    the illustrative example in its own public developer documentation — not a live response harvested
+    from an unauthenticated endpoint. The only email present is that corporate work address; the LinkedIn
+    URL is public; the only mobile number Cognism ships in the example is the obvious dummy "+123456789";
+    the remaining numbers (+442038580822, +16469719264) are the Cognism London and New York switchboards.
+    No third party's personal data appears. Nothing was redacted because nothing new is exposed — see
+    the enrichment PII guardrail.

@@ -1,0 +1,298 @@
+generated: '2026-08-13'
+method: searched
+source: openapi/cognism-api-openapi.yml
+description: Recommended x-agentic-access execution contracts for the Cognism API. The baseline was generated
+  mechanically from the OpenAPI, then CURATED against what Cognism actually documents. The mechanical
+  pass classified all six POST operations as acting/write; five of them - searchContacts, searchAccounts,
+  enrichContact, enrichAccount and redeemAccounts - are POST-shaped reads that mutate nothing and consume
+  no credits, and have been reclassified. redeemContacts was raised to acting/financial because it is
+  the single operation in this API that spends money, and it has no idempotency key to protect a retry.
+  A governance starting point - bind audience per deployment.
+summary:
+  operations: 25
+  by_action_class:
+    connected: 24
+    acting: 1
+  by_consequence:
+    read: 24
+    financial: 1
+  human_in_the_loop_required: 0
+operations:
+- path: /api/search/contact/search
+  method: post
+  operationId: searchContacts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    audience: null
+    token:
+      max-ttl: 3600
+    audit: recommended
+    x-curation-note: POST but semantically a read - the body is a filter set, not a mutation. Consumes
+      no credits.
+- path: /api/search/account/search
+  method: post
+  operationId: searchAccounts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    audience: null
+    token:
+      max-ttl: 3600
+    audit: recommended
+    x-curation-note: POST but semantically a read. Consumes no credits.
+- path: /api/search/contact/redeem
+  method: post
+  operationId: redeemContacts
+  x-agentic-access:
+    action-class: acting
+    consequence: financial
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - batch-size
+      - spend-threshold
+      - abnormal
+    audit: required
+    purpose: required
+    x-curation-note: THE metered operation. First redemption of a contact consumes a credit; re-redemption
+      of an already-redeemed contact is free. There is no idempotency key, so a retry of a first redemption
+      can spend twice. Cap the token, require a purpose, audit every call, and escalate on batch size
+      or spend threshold.
+- path: /api/search/account/redeem
+  method: post
+  operationId: redeemAccounts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    audience: null
+    token:
+      max-ttl: 3600
+    audit: recommended
+    x-curation-note: Redeem verb, but account redemptions are explicitly free of credits.
+- path: /api/search/contact/enrich
+  method: post
+  operationId: enrichContact
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    audience: null
+    token:
+      max-ttl: 3600
+    audit: recommended
+    x-curation-note: POST but semantically a read - matches an input record against the database. Consumes
+      no credits.
+- path: /api/search/account/enrich
+  method: post
+  operationId: enrichAccount
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    audience: null
+    token:
+      max-ttl: 3600
+    audit: recommended
+    x-curation-note: POST but semantically a read. Consumes no credits.
+- path: /api/search/entitlement/contactEntitlementSubscription
+  method: get
+  operationId: getContactEntitlement
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/entitlement/accountEntitlementSubscription
+  method: get
+  operationId: getAccountEntitlement
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/technologiesSearch
+  method: get
+  operationId: listTechnologies
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/managementLevels
+  method: get
+  operationId: listManagementLevels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/companySizes
+  method: get
+  operationId: listCompanySizes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/industries
+  method: get
+  operationId: listIndustries
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/jobFunctions
+  method: get
+  operationId: listJobFunctions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/regions
+  method: get
+  operationId: listRegions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/countries
+  method: get
+  operationId: listCountries
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/states
+  method: get
+  operationId: listStates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/sic
+  method: get
+  operationId: listSicCodes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/isic
+  method: get
+  operationId: listIsicCodes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/naics
+  method: get
+  operationId: listNaicsCodes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/skills
+  method: get
+  operationId: listSkills
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/companyTypes
+  method: get
+  operationId: listCompanyTypes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/filter/seniority
+  method: get
+  operationId: listSeniorityLevels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/contact/optOut
+  method: get
+  operationId: listOptOutContacts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/contact/optOut/email/{email}
+  method: get
+  operationId: getOptOutByEmail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/search/contact/optOut/id/{id}
+  method: get
+  operationId: getOptOutById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+curated: '2026-08-13'
+curation_source:
+- https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+- conventions/cognism-conventions.yml

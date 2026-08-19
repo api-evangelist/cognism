@@ -1,0 +1,110 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://help.cognism.com/hc/en-gb/articles/37384504094226-Cognism-API-Troubleshooting plus live
+  observed responses from https://api.cognism.com/docs and https://api.cognism.com/api/openapi.json
+format: json-array
+rfc9457: false
+envelope:
+  shape: '[{"key": "<MachineKey>", "code": <httpStatus>, "msg": "<message>"}]'
+  content_type: application/json
+  note: >-
+    The body is a top-level JSON ARRAY of error objects, not an object and not
+    application/problem+json. `code` repeats the HTTP status. `key` is the machine-readable
+    discriminator an agent should branch on.
+description: >-
+  Cognism publishes no error-code registry. This catalogue combines the two error keys observed live
+  on the Cognism edge with the failure modes documented in Cognism's own API troubleshooting article,
+  which names the status codes but not the keys. Where a key was not observable anonymously it is
+  recorded as null rather than guessed.
+
+problems:
+- status: 400
+  key: null
+  title: Invalid request
+  detail: >-
+    The request body is invalid or a required parameter is missing. Cognism names four causes: a
+    required field is absent, a parameter name is wrong, the body is not valid JSON, or a data type
+    does not match the endpoint specification.
+  remediation: >-
+    Validate the body against the endpoint schema before sending. Check parameter spelling — several
+    filters are nested (account.revenue.from, searchOptions.match_exact_job_title) and a flat key is
+    silently the wrong shape.
+  source: help centre — Cognism API Troubleshooting, "Invalid request"
+  applies_to: [searchContacts, searchAccounts, enrichContact, enrichAccount, redeemContacts, redeemAccounts]
+
+- status: 401
+  key: MissingCredentials
+  title: Missing required credentials
+  detail: >-
+    No Authorization header was supplied, or the bearer token is invalid, expired or malformed.
+    Cognism also returns 401 when the organisation's API Entitlements have not been set — so a 401 is
+    not necessarily a token problem.
+  observed: '[{"key":"MissingCredentials","code":401,"msg":"Missing required credentials"}]'
+  remediation: >-
+    Confirm the header is `Authorization: Bearer <token>`. Tokens expire after 6 months — regenerate
+    in the Cognism app under Settings > Tokens and API. If the token is fresh and it still 401s,
+    entitlements are unset: contact your Account Manager and Cognism Support.
+  source: live probe of https://api.cognism.com/docs on 2026-08-13, corroborated by the troubleshooting article
+  applies_to: [all]
+
+- status: 404
+  key: RouteNotFound
+  title: Not found
+  detail: The requested path does not exist on the Cognism gateway.
+  observed: '[{"key":"RouteNotFound","code":404,"msg":"Not found"}]'
+  remediation: Check the path against the published collection. All endpoints live under /api/search/.
+  source: live probe of https://api.cognism.com/api/openapi.json on 2026-08-13
+  applies_to: [all]
+
+- status: 429
+  key: null
+  title: Rate limit exceeded
+  detail: >-
+    The application exceeded the rate limit for the endpoint. Cognism publishes 20-100 records per
+    search request, 1-20 redeem IDs per redeem request, and up to 1,000 redeemed records per minute.
+  remediation: >-
+    Reduce request frequency and implement retry with backoff. Batch within the published per-request
+    ceilings. Note that no RateLimit-* or Retry-After header is returned, so backoff must be blind.
+  source: help centre — Cognism API Troubleshooting, "Rate limit exceeded"
+  applies_to: [all]
+
+non_error_failure_modes:
+- name: No records returned
+  status: 200
+  detail: >-
+    Search or Enrich returns an empty result set rather than an error when no record matches, or when
+    the best match scored below the minimum match score (default 30 for contacts, 40 for accounts).
+  remediation: >-
+    Supply a unique identifier (email, sha256, linkedinUrl, domain, website), loosen filters, or lower
+    minMatchScore — while remembering that below 27 (contact) / 35 (account) the match is low quality.
+  note: This is the most common "failure" and it is NOT an HTTP error. Agents must check result length.
+
+- name: Missing fields in a Redeem response
+  status: 200
+  detail: >-
+    The record returns successfully but expected fields are absent because they are outside the
+    organisation's API Entitlements. The API omits them silently.
+  remediation: >-
+    Read the entitlement map with getContactEntitlement / getAccountEntitlement and treat absent
+    entitled-false fields as unlicensed, not as missing data. Contact your Account Manager to widen.
+
+- name: Office/HQ phone number absent from a contact redemption
+  status: 200
+  detail: >-
+    Company-level phone numbers are only returned when redeeming an Account. Redeeming a Contact
+    returns contact-level data only.
+  remediation: Redeem the Account (free — no credits) when you need company switchboard or HQ numbers.
+
+- name: Invalid Redeem ID
+  status: null
+  detail: >-
+    The redeem ID is incorrect, incomplete, or was not issued by a Search or Enrich response. Cognism
+    documents this failure but does not publish the status code or key it returns.
+  remediation: >-
+    Use the redeemId verbatim from the Search/Enrich response. An OUTDATED redeemId is not an error —
+    Cognism falls back to the current one and returns the new redeemId with the data.
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

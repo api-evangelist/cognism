@@ -4,8 +4,14 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Cognism
 providerId: cognism
 created: '2026-05-08'
-modified: '2026-05-08'
-reconciled: false
+# 2026-08-13: UPGRADED from method:generated (the 2026-05-08 bulk sweep, which invented a single
+# "Cognism Platform" enterprise plan) to method:searched, read off the live pricing page. Cognism
+# now publishes named packages and an itemised feature matrix — it publishes no PRICES.
+method: searched
+modified: '2026-08-13'
+reconciled: true
+sources:
+- https://www.cognism.com/pricing
 tags:
 - Sales Intelligence
 - B2B
@@ -15,36 +21,121 @@ tags:
 - Intent Data
 - Plans
 description: >-
-  Cognism does not publish self-serve API pricing. All access is sales-led and bundled into enterprise
-  seat-based contracts that include Diamond Data (verified mobile), Intent (Bombora), and platform
-  integrations (Salesforce, HubSpot, Outreach). Contract value is typically annual and includes credit
-  allowances rather than per-call pricing.
-notes: Sales-led pricing; no self-serve plans page. Contract values include enrichment credits and seat counts.
-sources:
-- https://www.cognism.com/
-- https://www.cognism.com/pricing
+  Cognism publishes named packages and a side-by-side feature matrix but no monetary amounts, no
+  currency and no billing period. Every tier ends in "Talk to sales". Sales Prospecting comes in
+  Standard and Pro, both including 5 seats. CRM Enrichment and Data-as-a-Service are separate
+  products that can be bought as add-ons or standalone. API access sits inside Data-as-a-Service and
+  is explicitly conditional: "API access requires a Prospecting seat". Consumption across all
+  products is metered in Credits — 1 credit reveals 1 contact, and previously revealed contacts are
+  free to view again.
+notes: >-
+  plan_count 4, price_count 0. No self-serve signup, no published rate card, no free tier and no
+  trial on the pricing page — the only conversion paths are "Talk to sales" and "Book a demo".
+plan_count: 4
+prices_published: false
+currency: null
+billing_period: null
+free_tier: false
+trial: false
+self_serve: false
 plans:
-- id: cognism-platform
-  name: Cognism Platform
-  type: enterprise
-  description: Annual seat-based contract bundling platform UI, API enrichment, integrations, and Diamond Data. Pricing on request.
-  entries:
-  - label: Platform
-    name: platform
-    type: flat
-    metric: year
-    limit: -1
-    timeFrame: annual
-    geo: global
-    unit: 1
-    price: contact sales
-    userMultiplied: true
+- id: cognism-prospecting-standard
+  name: Standard
+  product: Sales Prospecting
+  type: subscription
+  price: contact sales
+  description: For teams that need core prospecting workflows. 5 seats included.
+  seats_included: 5
   elements:
-  - name: Platform UI access
-  - name: API enrichment credits
-  - name: Integrations (CRM, sales tools)
-  - name: Diamond Data (verified mobile)
-  - name: Intent Data (Bombora)
+  - Company revenue, headcount and HQ
+  - Emails, mobiles, job titles and work history
+  - Technology usage
+  - Hiring signals
+  - Funding and M&A signals
+  - Job change signals
+  - AI company research
+  - AI persona builder
+  - AI search
+  - CSV enrichment
+  - SSO
+  - Live chat support
+  - Build targeted lists using firmographic, technographic and signal-based filters
+  - Export data and enrich lists via CSV uploads
+  add_ons: [CRM Enrichment, Data-as-a-Service]
+  excludes: [Premium mobile filter, Mobile verification on demand, Intent data, Account manager]
+
+- id: cognism-prospecting-pro
+  name: Pro
+  product: Sales Prospecting
+  type: subscription
+  price: contact sales
+  description: >-
+    For teams that need advanced prospecting workflows. 5 seats included. Everything in Standard,
+    plus higher-quality mobile data, on-demand verification and intent.
+  seats_included: 5
+  most_popular: true
+  elements:
+  - Everything in Standard
+  - Premium mobile filter
+  - Mobile verification on demand
+  - Intent data
+  - Account manager
+  add_ons: [CRM Enrichment, Data-as-a-Service]
+
+- id: cognism-crm-enrichment
+  name: CRM Enrichment
+  product: CRM Enrichment
+  type: add-on-or-standalone
+  price: contact sales
+  description: >-
+    Automatically enrich and maintain CRM records at scale. Available as an add-on to Standard or Pro,
+    or as a standalone product.
+  elements:
+  - Enrich records at scale
+  - Improve CRM coverage and quality
+  - Support segmentation, routing and reporting
+  - Ongoing maintenance included — credits are only re-spent when key details change, such as a job move
+
+- id: cognism-data-as-a-service
+  name: Data-as-a-Service
+  product: Data-as-a-Service
+  type: add-on-or-standalone
+  price: contact sales
+  description: >-
+    THE API TIER. Deliver Cognism data into your own systems via API or bulk delivery. Priced on data
+    volume and delivery method.
+  api_access: true
+  requires: A Prospecting seat (Standard or Pro). Bulk delivery is available standalone.
+  elements:
+  - Access data in real time via API or bulk delivery
+  - Power enrichment, routing and internal workflows at scale
+  - Designed for embedded data use cases across your stack
+  - Usage based on records and data volume
+  gating: >-
+    Beyond the commercial tier, API use requires Cognism to enable API access on the subscription and
+    the Provisioning team to configure field-level Entitlements after Account Manager approval.
+
+metering:
+  unit: credit
+  definition: 1 credit = 1 revealed contact
+  included: Each seat includes an allocation of credits as part of the subscription.
+  top_up: Additional credits can be purchased at any point.
+  free_operations:
+  - Viewing previously revealed contacts
+  - Search API requests
+  - Enrich API requests
+  - Account (company) redemptions
+  charged_operations:
+  - First redemption of a contact via the Redeem API
+  portability: >-
+    "Use the same credits across the prospecting platform, Enrich, and API without extra cost" —
+    one pool spans UI and API.
+
+conversion_paths:
+- {label: Talk to sales, url: 'https://www.cognism.com/contact'}
+- {label: Book a Demo, url: 'https://www.cognism.com/demo'}
+- {label: Log in, url: 'https://app.cognism.com/auth/sign-in'}
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

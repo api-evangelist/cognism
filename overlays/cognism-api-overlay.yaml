@@ -1,0 +1,78 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Cognism API
+  version: 1.0.0
+extends: openapi/cognism-api-openapi.yml
+x-generated: '2026-08-13'
+x-method: generated
+x-source: >-
+  API Evangelist enrichment pipeline. Captures the annotations added on top of the OpenAPI derived
+  from Cognism's published Postman collection, so the derived spec stays separable from our commentary.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: cognism
+    x-apievangelist-contract-provenance: >-
+      Derived from the Cognism API Postman collection (collection
+      14862827-58d2e00d-2fc0-4594-89e3-3c6d43bf293d) published by Cognism at
+      https://developers.cognism.com/ . Cognism publishes no OpenAPI of its own.
+    x-apievangelist-access: sales-gated
+    x-apievangelist-metering: credit-per-redeemed-contact
+
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      conventions: conventions/cognism-conventions.yml
+      errors: errors/cognism-problem-types.yml
+      lifecycle: lifecycle/cognism-lifecycle.yml
+      authentication: authentication/cognism-authentication.yml
+      rate_limits: rate-limits/cognism-rate-limits.yml
+      data_model: data-model/cognism-data-model.yml
+      conformance: conformance/cognism-conformance.yml
+      agentic_access: agentic-access/cognism-agentic-access.yml
+      skills: skills/_index.yml
+
+- target: $.paths['/api/search/contact/redeem'].post
+  update:
+    x-apievangelist-metered: true
+    x-apievangelist-cost: >-
+      1 credit per contact redeemed for the first time. Re-redeeming a contact already redeemed by
+      this organisation is free, and a credit is only spent again when the contact's key details
+      change (e.g. a job move).
+    x-apievangelist-agent-guidance: >-
+      The only spend-money call in this API. Check the has* availability booleans on the preview
+      before redeeming, deduplicate redeemIds client-side, and never redeem speculatively — there is
+      no idempotency key to protect a retry.
+
+- target: $.paths['/api/search/account/redeem'].post
+  update:
+    x-apievangelist-metered: false
+    x-apievangelist-cost: Free. Account redemptions do not consume credits.
+
+- target: $.paths['/api/search/contact/search'].post
+  update:
+    x-apievangelist-metered: false
+    x-apievangelist-agent-guidance: >-
+      Free. Returns previews only. Paging is forward-only via lastReturnedKey; you cannot jump to a
+      page. Fetch the controlled vocabularies from the Filter endpoints rather than hard-coding
+      seniority, industry, country or technology strings.
+
+- target: $.paths['/api/search/contact/enrich'].post
+  update:
+    x-apievangelist-metered: false
+    x-apievangelist-agent-guidance: >-
+      Free. Supply a unique identifier (email, sha256 or linkedinUrl) for the best match. Check
+      matchScore against the default minimum of 30 — below 27 is a low-quality match. An empty
+      results array is a 200, not an error.
+
+- target: $.paths['/api/search/contact/optOut'].get
+  update:
+    x-apievangelist-compliance: gdpr-ccpa-suppression
+    x-apievangelist-agent-guidance: >-
+      Honour this list before any outreach. Also respect the `dnc` flag on individual phone numbers.
+
+- target: $.components.securitySchemes.bearerAuth
+  update:
+    x-apievangelist-rotation: >-
+      Tokens expire after 6 months with no documented grace period. Schedule rotation; an expired
+      token fails closed with a 401 that is indistinguishable from an unset-entitlements 401.

@@ -1,0 +1,151 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developers.cognism.com/ (Cognism API Postman collection) and the Cognism help centre API
+  articles 37382868352914, 37383428888978, 37383359556498, 37384212207506, 37384269773586,
+  37384309136402, 37384318045970, 37384504094226
+docs: https://help.cognism.com/hc/en-gb/articles/37384318045970-Cognism-API-FAQ
+description: >-
+  Cross-cutting request/response semantics for the Cognism API, read from Cognism's own published
+  collection and help centre and cross-checked against the derived OpenAPI.
+
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <API_TOKEN>'
+  alternate: 'api_key query-string parameter (documented, but Cognism recommends the header)'
+  token_ttl: 6 months
+  issuance: Cognism app, Settings > Tokens and API. Multiple tokens per account; each has a created and an expiry date.
+  gating: >-
+    API access must be enabled on the subscription and field-level Entitlements provisioned by
+    Cognism before any token works. A 401 can mean "no entitlements" rather than "bad token".
+  artifact: authentication/cognism-authentication.yml
+
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    Cognism publishes no idempotency key, no request-replay contract and no retry-safety guarantee.
+    This matters because redeemContacts is metered: a retried redeem of a NOT-yet-redeemed contact is
+    the one call in this API that can cost money twice. The mitigating property is Cognism's own
+    rule that re-redeeming an already-redeemed contact does not consume additional credits, so the
+    charge is effectively deduplicated on the contact rather than on the request. Callers should
+    still deduplicate redeemIds client-side and treat redeem as at-least-once.
+  no_pointer_reason: >-
+    Deliberately NOT wired as type Idempotency in apis.yml — there is no idempotency contract to
+    point at.
+
+pagination:
+  style: opaque-cursor
+  direction: forward-only
+  request_params:
+    cursor: lastReturnedKey
+    page_size: indexSize
+  response_fields:
+    cursor: lastReturnedKey
+    total: totalResults
+  page_size_bounds: {search: 20-100, redeem_ids_per_request: 1-20}
+  compliance_variant:
+    endpoint: /api/search/contact/optOut
+    request_params: {cursor: pageKey, page_size: pageSize}
+    note: The opt-out list uses pageKey/pageSize instead of lastReturnedKey/indexSize.
+  note: >-
+    "Pagination of results is possible from first to last result, but you cannot hop between pages"
+    — Cognism collection description. There is no offset/page-number form and no total-pages field.
+
+field_selection:
+  style: entitlement-governed
+  mechanism: >-
+    There is no sparse-fieldset or expand parameter. The field set a Redeem response returns is fixed
+    per organisation by API Entitlements, provisioned by the Cognism team. Read the live entitlement
+    map with getContactEntitlement / getAccountEntitlement before treating an absent field as an
+    absent value.
+  operations: [getContactEntitlement, getAccountEntitlement]
+
+preview_and_redeem:
+  pattern: two-phase
+  description: >-
+    The defining convention of this API. Search and Enrich return PREVIEW records carrying `has*`
+    booleans (hasEmail, hasMobilePhoneNumbers, hasDirectPhoneNumbers, hasSkills, …) plus a `redeemId`.
+    They cost nothing. Redeem exchanges the redeemId for real values and is where credits are spent.
+    Agents must check the `has*` flags before redeeming rather than redeeming speculatively.
+  redeem_id_semantics: >-
+    A contact redeemId encodes person + job title + account, so it changes when the person changes
+    role or employer. Cognism falls back to the current redeemId when an outdated one is supplied and
+    returns the new redeemId alongside the data — so a stale ID degrades, it does not break.
+
+matching:
+  parameter: minMatchScore
+  defaults: {contact: 30, account: 40}
+  low_quality_threshold: {contact: 27, account: 35}
+  anchor_fields: >-
+    anchorFields[] on both Enrich operations names fields that MUST match for a record to be returned.
+  response_field: matchScore
+
+metering:
+  unit: credit
+  charged_on: [redeemContacts]
+  free: [searchContacts, searchAccounts, enrichContact, enrichAccount, redeemAccounts]
+  rule: >-
+    1 credit = 1 revealed contact. Re-redeeming an already-redeemed contact is free. A credit is only
+    consumed again if the contact's key details change (e.g. a job move).
+  artifact: finops/cognism-finops.yml
+
+request_tracing:
+  request_id_header: null
+  observed_response_headers: [Date, Content-Type, Content-Length, Connection, CF-Ray, CF-Cache-Status,
+    Content-Encoding, Strict-Transport-Security, Vary, Via, referrer-policy, request-time]
+  note: >-
+    No first-party correlation-id header is documented. The saved 200 examples in Cognism's own
+    collection show `CF-Ray` (Cloudflare edge) and `request-time`; CF-Ray is the only value with any
+    correlation use, and it is the CDN's, not Cognism's. Cognism's troubleshooting article asks you
+    to capture the endpoint, HTTP status and full response body when raising a ticket — which is what
+    you do when there is no request ID.
+
+versioning:
+  scheme: none
+  current: null
+  note: >-
+    No version segment in the path, no version header, no dated version. The collection describes a
+    "new Cognism API" that superseded an older one, and Cognism published a migration guide, but
+    neither the current nor the legacy interface carries a version identifier a client can pin to.
+  artifact: lifecycle/cognism-lifecycle.yml
+
+error_envelope:
+  format: json-array
+  shape: '[{"key": "<MachineKey>", "code": <httpStatus>, "msg": "<message>"}]'
+  rfc9457: false
+  content_type: application/json
+  observed:
+  - '[{"key":"MissingCredentials","code":401,"msg":"Missing required credentials"}]'
+  - '[{"key":"RouteNotFound","code":404,"msg":"Not found"}]'
+  note: >-
+    Unusual shape — the payload is a top-level ARRAY, not an object, so a client that does
+    `response.json()["error"]` will break. The HTTP status is duplicated inside the body as `code`.
+  artifact: errors/cognism-problem-types.yml
+
+rate_limits:
+  documented: true
+  published_limits:
+  - {scope: per-request, endpoint: searchContacts/searchAccounts, limit: 20-100 records}
+  - {scope: per-request, endpoint: redeemContacts/redeemAccounts, limit: 1-20 redeem IDs}
+  - {scope: per-minute, endpoint: redeem, limit: 1000 records}
+  response_headers: []
+  exhaustion_status: 429
+  note: >-
+    The numbers are published but the RUNTIME SIGNAL is not — Cognism documents no X-RateLimit-*,
+    RateLimit-* or Retry-After header, so an agent cannot read remaining quota from a response and
+    must back off blind.
+  artifact: rate-limits/cognism-rate-limits.yml
+
+compliance:
+  suppression_list: true
+  operations: [listOptOutContacts, getOptOutByEmail, getOptOutById]
+  note: >-
+    Cognism exposes its opt-out list as first-class API surface so consumers can honour GDPR/CCPA
+    suppression in their own systems. Contact records also carry a `dnc` (Do Not Call) flag on phone
+    numbers. Treat both as hard gates before any outreach.
+  docs: https://www.cognism.com/compliance
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

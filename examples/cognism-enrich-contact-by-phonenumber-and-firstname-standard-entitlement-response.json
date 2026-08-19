@@ -1,0 +1,48 @@
+{
+  "matchScore": 32,
+  "results": [
+    {
+      "id": "7351d07c-9118-403b-a7c1-d6510cc0c378",
+      "fullName": "Stjepan Buljat",
+      "firstName": "Stjepan",
+      "lastName": "Buljat",
+      "jobTitle": "CTO",
+      "hasManagementLevel": true,
+      "hasSeniority": true,
+      "hasJobFunction": true,
+      "hasPositionStartDate": true,
+      "hasEmail": true,
+      "hasCountry": true,
+      "hasState": false,
+      "hasCity": true,
+      "hasZip": false,
+      "hasStreet": true,
+      "hasLinkedinUrl": true,
+      "hasEducation": true,
+      "hasPreviousAccounts": true,
+      "hasSkills": true,
+      "hasLastConfirmed": true,
+      "redeemId": "MzRkNjMzYjctNDFlYS0zYWM3LWEyODAtNDMxZDcxZmQ3N2ViOzhkMDlhZGJhLTczMDYtMzhlMS1iODRiLWU4NmU2OWU3MGU3YjtlZmM2ZDk3NS04NTk5LTM4YWItOGNmZS1lMWM0MmFjMTZkYzY",
+      "account": {
+        "id": "efc6d975-8599-38ab-8cfe-e1c42ac16dc6",
+        "name": "Cognism",
+        "hasDomain": true,
+        "hasIndustries": true,
+        "hasDescription": true,
+        "hasShortDescription": true,
+        "hasFounded": true,
+        "hasWebsite": true,
+        "hasLinkedinUrl": true,
+        "hasRevenue": true,
+        "hasSic": true,
+        "hasIsic": false,
+        "hasNaics": true,
+        "hasHeadcount": true,
+        "hasSize": true,
+        "hasTechnologies": true,
+        "hasType": true,
+        "hasLocation": true
+      }
+    }
+  ]
+}

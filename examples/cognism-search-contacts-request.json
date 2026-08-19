@@ -1,0 +1,27 @@
+{
+  "firstName": "Stjepan",
+  "lastName": "Buljat",
+  "jobTitles": [
+    "Chief Innovation Officer"
+  ],
+  "excludeJobTitles": [
+    "CEO"
+  ],
+  "regions": [
+    "EMEA"
+  ],
+  "mobilePhoneNumbers": {
+    "highPlus": true
+  },
+  "emailQuality": {
+    "highPlus": true
+  },
+  "account": {
+    "names": [
+      "Cognism"
+    ],
+    "officePhoneNumbers": {
+      "medium": true
+    }
+  }
+}

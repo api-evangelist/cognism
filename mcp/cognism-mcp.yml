@@ -1,0 +1,121 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: openapi/cognism-api-openapi.yml
+description: >-
+  Cognism ships NO Model Context Protocol server of its own. Searched the Cognism developer portal,
+  help centre, GitHub organisation, npm (`@modelcontextprotocol` scope and text search) and the
+  public MCP registries; nothing first-party exists, and mcp.cognism.com does not resolve. Third
+  parties (Zapier MCP, viaSocket) wrap "Cognism Prospector" as an MCP surface, but those are the
+  integrators' servers running against their own Cognism connectors, not a Cognism agent surface —
+  they are recorded below as third_party and deliberately NOT treated as a provider deployment.
+  The tools[] list below is a CANDIDATE derived one-to-one from the OpenAPI operations. It is what a
+  Cognism MCP server would plausibly expose; it is not something an agent can call today.
+
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: derived
+  note: >-
+    mode:none — nobody ships a server. If Cognism were to ship one, auth would be the same bearer API
+    token the REST API uses (Settings > Tokens and API in the Cognism app, 6-month TTL).
+
+third_party:
+- name: Zapier MCP — Cognism Prospector
+  url: https://zapier.com/mcp/cognism-prospector
+  operator: Zapier
+  note: Zapier's MCP endpoint fronting its own Cognism Prospector connector. Not a Cognism deployment.
+- name: viaSocket MCP — Cognism Prospector
+  url: https://viasocket.com/mcp/cognism-prospector
+  operator: viaSocket
+  note: viaSocket's MCP endpoint fronting its own Cognism Prospector connector. Not a Cognism deployment.
+
+server:
+  name: cognism
+  transport: null
+  url: null
+
+tools:
+- name: search_contacts
+  description: Search the Cognism database for contacts matching a filter set; returns previews with redeem IDs. Does not consume credits.
+  source_operation: openapi/cognism-api-openapi.yml#searchContacts
+- name: search_accounts
+  description: Search the Cognism database for companies matching a filter set; returns previews. Does not consume credits.
+  source_operation: openapi/cognism-api-openapi.yml#searchAccounts
+- name: enrich_contact
+  description: Match a contact you already hold to the best Cognism record; returns a match score and redeem ID. Does not consume credits.
+  source_operation: openapi/cognism-api-openapi.yml#enrichContact
+- name: enrich_account
+  description: Match a company you already hold to the best Cognism record; returns a match score. Does not consume credits.
+  source_operation: openapi/cognism-api-openapi.yml#enrichAccount
+- name: redeem_contacts
+  description: Exchange up to 20 redeem IDs for full contact records. CONSUMES CREDITS on first redemption of a contact.
+  source_operation: openapi/cognism-api-openapi.yml#redeemContacts
+  consequence: metered
+- name: redeem_accounts
+  description: Exchange account IDs for full company records. Does not consume credits.
+  source_operation: openapi/cognism-api-openapi.yml#redeemAccounts
+- name: get_contact_entitlement
+  description: Read which contact fields this organisation is licensed to receive.
+  source_operation: openapi/cognism-api-openapi.yml#getContactEntitlement
+- name: get_account_entitlement
+  description: Read which account fields this organisation is licensed to receive.
+  source_operation: openapi/cognism-api-openapi.yml#getAccountEntitlement
+- name: list_technologies
+  description: Reference list of technology values the technologies search filter accepts.
+  source_operation: openapi/cognism-api-openapi.yml#listTechnologies
+- name: list_management_levels
+  description: Reference list of values the managementLevel search filter accepts.
+  source_operation: openapi/cognism-api-openapi.yml#listManagementLevels
+- name: list_company_sizes
+  description: Reference list of company size bands.
+  source_operation: openapi/cognism-api-openapi.yml#listCompanySizes
+- name: list_industries
+  description: Reference list of values the industries search filter accepts.
+  source_operation: openapi/cognism-api-openapi.yml#listIndustries
+- name: list_job_functions
+  description: Reference list of values the jobFunctions search filter accepts.
+  source_operation: openapi/cognism-api-openapi.yml#listJobFunctions
+- name: list_regions
+  description: Reference list of world regions.
+  source_operation: openapi/cognism-api-openapi.yml#listRegions
+- name: list_countries
+  description: Reference list of countries.
+  source_operation: openapi/cognism-api-openapi.yml#listCountries
+- name: list_states
+  description: Reference list of states.
+  source_operation: openapi/cognism-api-openapi.yml#listStates
+- name: list_sic_codes
+  description: Reference list of SIC codes.
+  source_operation: openapi/cognism-api-openapi.yml#listSicCodes
+- name: list_isic_codes
+  description: Reference list of ISIC codes.
+  source_operation: openapi/cognism-api-openapi.yml#listIsicCodes
+- name: list_naics_codes
+  description: Reference list of NAICS codes.
+  source_operation: openapi/cognism-api-openapi.yml#listNaicsCodes
+- name: list_skills
+  description: Reference list of skills.
+  source_operation: openapi/cognism-api-openapi.yml#listSkills
+- name: list_company_types
+  description: Reference list of company types.
+  source_operation: openapi/cognism-api-openapi.yml#listCompanyTypes
+- name: list_seniority_levels
+  description: Reference list of seniority levels.
+  source_operation: openapi/cognism-api-openapi.yml#listSeniorityLevels
+- name: list_opt_out_contacts
+  description: Page through the contacts that have opted out of Cognism data processing.
+  source_operation: openapi/cognism-api-openapi.yml#listOptOutContacts
+- name: get_opt_out_by_email
+  description: Check whether an email address is on the Cognism opt-out list.
+  source_operation: openapi/cognism-api-openapi.yml#getOptOutByEmail
+- name: get_opt_out_by_id
+  description: Check whether a contact (by redeem ID) is on the Cognism opt-out list.
+  source_operation: openapi/cognism-api-openapi.yml#getOptOutById
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

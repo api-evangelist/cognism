@@ -1,0 +1,109 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/cognism-api-openapi.yml
+docs: https://developers.cognism.com/
+description: >-
+  Entity graph of the Cognism API, derived from the schema $refs and id-reference fields in the
+  OpenAPI. Two root entities — Contact and Account — each existing in two projections (preview and
+  full), joined by a redeem step. The projection split IS the data model here: the same entity has a
+  different shape depending on whether you have paid for it.
+
+id_semantics:
+- id: id
+  entity: [Contact, Account]
+  format: uuid
+  note: Stable identifier for the person or the company.
+- id: redeemId
+  entity: Contact
+  format: base64
+  note: >-
+    Composite key encoding person + job title + account, base64-encoded as three semicolon-separated
+    UUIDs. Changes when the person changes role or employer. An outdated redeemId still resolves —
+    the API falls back to the current one and returns it alongside the record. For Accounts the plain
+    `id` is used as the redeem key.
+- id: sha256
+  entity: Contact
+  format: hex
+  note: Hashed email, accepted as a search and enrich identifier so callers need not transmit the address.
+
+entities:
+- name: Contact
+  description: A person, in a specific job title, at a specific account.
+  projections:
+  - {name: ContactPreview, cost: free, from: [searchContacts, enrichContact], carries: 'has* availability booleans + redeemId'}
+  - {name: Contact, cost: credit, from: [redeemContacts], carries: actual field values}
+  key_fields: [id, redeemId, fullName, firstName, lastName, jobTitle, seniority, managementLevel,
+    jobFunction, email, linkedinUrl, positionStartDate, lastConfirmed]
+
+- name: Account
+  description: A company.
+  projections:
+  - {name: AccountPreview, cost: free, from: [searchAccounts, enrichAccount], carries: 'has* availability booleans'}
+  - {name: Account, cost: free, from: [redeemAccounts], carries: actual field values}
+  key_fields: [id, name, domain, website, linkedinUrl, description, shortDescription, founded,
+    revenue, sizeFrom, sizeTo, headcount, industries, technologies, type, sic, isic, naics, lastConfirmed]
+
+- name: PhoneNumber
+  description: A phone number with a quality score and a Do-Not-Call flag.
+  key_fields: [number, numberType, label, score, dnc, addressType]
+
+- name: Location
+  description: A postal location, typed as office or hq.
+  key_fields: [addressType, country, state, city, street, zip]
+
+- name: Entitlement
+  description: >-
+    Per-organisation map of field name to boolean licence. Not a record you fetch by id — a
+    configuration you read to interpret every other response.
+  key_fields: [field, entitled]
+
+- name: OptOut
+  description: A suppression record for a contact who has opted out of Cognism data processing.
+  key_fields: [email, redeemId]
+
+- name: Event
+  description: >-
+    Time-stamped signals attached to an Account or Contact rather than stored as a first-class entity.
+  variants: [hiringEvent, fundingEvent, ipoEvent, acquisitionEvent, jobJoinEvent, jobLeaveEvent,
+    locationMoveEvent]
+
+relationships:
+- {from: Contact, to: Account, type: belongs_to, via: account, cardinality: one, note: The contact's current employer, embedded in both projections.}
+- {from: ContactPreview, to: AccountPreview, type: belongs_to, via: account, cardinality: one}
+- {from: Contact, to: Account, type: has_many, via: previousAccounts, cardinality: many, note: Employment history.}
+- {from: Contact, to: PhoneNumber, type: has_many, via: mobilePhoneNumbers, cardinality: many}
+- {from: Contact, to: PhoneNumber, type: has_many, via: directPhoneNumbers, cardinality: many}
+- {from: Account, to: PhoneNumber, type: has_many, via: officePhoneNumbers, cardinality: many}
+- {from: Account, to: PhoneNumber, type: has_many, via: hqPhoneNumbers, cardinality: many}
+- {from: Account, to: Location, type: has_many, via: location, cardinality: many}
+- {from: Account, to: Event, type: has_many, via: 'hiringEvent / fundingEvent / ipoEvent / acquisitionEvent', cardinality: many}
+- {from: Contact, to: Event, type: has_many, via: 'jobJoinEvent / jobLeaveEvent / locationMoveEvent', cardinality: many}
+- {from: Contact, to: OptOut, type: has_one, via: 'email or redeemId', cardinality: one, note: Resolved by lookup, not embedded.}
+- {from: Contact, to: Entitlement, type: governed_by, via: getContactEntitlement, cardinality: one}
+- {from: Account, to: Entitlement, type: governed_by, via: getAccountEntitlement, cardinality: one}
+- {from: ContactPreview, to: Contact, type: resolves_to, via: redeemId, cardinality: one, note: The credit-consuming edge.}
+- {from: AccountPreview, to: Account, type: resolves_to, via: id, cardinality: one, note: Free.}
+
+reference_vocabularies:
+  description: >-
+    Fourteen Filter API endpoints publish the controlled vocabularies the search filters accept.
+    These are the enumerations of the data model and should be fetched rather than hard-coded.
+  entities:
+  - {name: Technology, operation: listTechnologies, searchable: true}
+  - {name: ManagementLevel, operation: listManagementLevels}
+  - {name: CompanySize, operation: listCompanySizes}
+  - {name: Industry, operation: listIndustries}
+  - {name: JobFunction, operation: listJobFunctions}
+  - {name: Region, operation: listRegions}
+  - {name: Country, operation: listCountries}
+  - {name: State, operation: listStates}
+  - {name: SicCode, operation: listSicCodes}
+  - {name: IsicCode, operation: listIsicCodes}
+  - {name: NaicsCode, operation: listNaicsCodes}
+  - {name: Skill, operation: listSkills}
+  - {name: CompanyType, operation: listCompanyTypes}
+  - {name: Seniority, operation: listSeniorityLevels}
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

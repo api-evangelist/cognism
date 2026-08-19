@@ -1,0 +1,68 @@
+generated: '2026-08-13'
+method: probed
+source: live GET of each /.well-known/ path on every Cognism host in apis.yml and the OpenAPI servers[]
+description: >-
+  Cognism serves no /.well-known/ discovery documents. Every RFC 8615 path was probed on all four
+  hosts — the marketing site, the application host that is the real API base, the api. host, and the
+  Postman-backed developer portal — and every one missed. www.cognism.com, app.cognism.com and
+  developers.cognism.com return their own 404 pages; api.cognism.com sits behind a Cloudflare edge
+  that answers 403 to anonymous requests for any path other than /docs.
+  RECORDED ABSENCE — no WellKnown or SecurityTxt pointer is emitted, because none of these
+  documents exists. Cognism does publish a security page and a vulnerability contact, but at
+  https://www.cognism.com/security rather than at /.well-known/security.txt.
+hosts:
+- host: https://www.cognism.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /llms.txt, status: 404}
+- host: https://app.cognism.com
+  note: The production API base URL published in the Cognism API Postman collection.
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /llms.txt, status: 404}
+- host: https://api.cognism.com
+  note: >-
+    Cloudflare-fronted. Returns 403 to anonymous requests on nearly every path; /docs and
+    /docs/openapi.json return a JSON 401 [{"key":"MissingCredentials","code":401}], so a real
+    gateway is behind it, but nothing is readable without a token.
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/oauth-authorization-server, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+  - {path: /.well-known/ai-plugin.json, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+  - {path: /.well-known/agent.json, status: 403}
+  - {path: /llms.txt, status: 403}
+- host: https://developers.cognism.com
+  note: The Cognism developer portal — a Postman Documenter published collection.
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /llms.txt, status: 404}
+summary:
+  paths_probed: 32
+  documents_found: 0
+  security_txt: false
+  agent_card: false
+  llms_txt: false
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

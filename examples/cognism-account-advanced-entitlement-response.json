@@ -1,0 +1,30 @@
+{
+  "account Entitlement": {
+    "website": true,
+    "name": true,
+    "location": true,
+    "founded": true,
+    "shortDescription": true,
+    "industry": true,
+    "acquisitionEvent": false,
+    "id": true,
+    "appearanceEvent": false,
+    "hiringEvent": false,
+    "linkedinUrl": true,
+    "type": true,
+    "sic": true,
+    "accountSearchOptions": true,
+    "headcount": true,
+    "size": true,
+    "fundingEvent": false,
+    "description": true,
+    "naics": true,
+    "officePhoneNumbers": false,
+    "domain": true,
+    "ipoEvent": false,
+    "technology": true,
+    "revenue": true,
+    "isic": true,
+    "hqPhoneNumbers": false
+  }
+}

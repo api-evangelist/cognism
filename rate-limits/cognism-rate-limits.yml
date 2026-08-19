@@ -4,8 +4,18 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Cognism
 providerId: cognism
 created: '2026-05-08'
-modified: '2026-05-08'
-reconciled: false
+# 2026-08-13: UPGRADED from method:generated (the 2026-05-08 bulk sweep, which recorded
+# "Cognism does not publicly document API rate limits") to method:searched. Cognism does
+# publish limits — in the help centre, not the developer portal, which is why the sweep missed them.
+method: searched
+modified: '2026-08-13'
+reconciled: true
+sources:
+- https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+- https://help.cognism.com/hc/en-gb/articles/37384212207506-Search-for-Contacts-and-Companies-via-Search-API-Endpoint
+- https://help.cognism.com/hc/en-gb/articles/37384309136402-Redeem-Contacts-and-Companies-via-Redeem-API
+- https://help.cognism.com/hc/en-gb/articles/37384504094226-Cognism-API-Troubleshooting
+- https://developers.cognism.com/
 tags:
 - Sales Intelligence
 - B2B
@@ -17,23 +27,79 @@ tags:
 - Quotas
 - Throttling
 description: >-
-  Cognism does not publicly document API rate limits. Limits are configured per enterprise contract
-  and are typically expressed as monthly enrichment credits rather than RPS. Coordinate with your
-  Cognism customer success manager for specific thresholds.
-notes: Contract-defined credit pools, not public RPS limits.
-sources:
-- https://www.cognism.com/api
+  Cognism publishes numeric API limits in its help centre. What it does NOT publish is the runtime
+  signal: no RateLimit-*, X-RateLimit-* or Retry-After response header is documented anywhere, and
+  none appears in the saved 200 responses of Cognism's own Postman collection. An agent therefore
+  cannot read remaining quota off a response and must back off blind on a 429. Separately from rate
+  limits, volume is governed commercially by the credit pool attached to the subscription — credits
+  are consumed only when a contact is redeemed for the first time.
+notes: >-
+  Published limits with no published headers. Limits are also described as endpoint-specific and
+  subject to change, with the developer portal named as the source of truth.
+limit_count: 3
 responseCodes:
   throttled: 429
+headers:
+  documented: []
+  note: >-
+    No rate-limit response headers documented or observed. Cognism's troubleshooting article says
+    only "reduce the frequency of API requests and implement retry logic in your application".
 limits:
-- name: Default
+- name: Search page size
+  scope: per-request
+  endpoints: [searchContacts, searchAccounts]
+  metric: records
+  window: request
+  limit: 20-100
+  burst: null
+  notes: The indexSize query parameter must fall between 20 and 100 records per request.
+- name: Redeem batch size
+  scope: per-request
+  endpoints: [redeemContacts, redeemAccounts]
+  metric: redeem-ids
+  window: request
+  limit: 1-20
+  burst: null
+  notes: One to twenty redeem IDs per redeem call. Larger volumes require multiple requests.
+- name: Redeem throughput
+  scope: per-account
+  endpoints: [redeemContacts, redeemAccounts]
+  metric: records
+  window: 1m
+  limit: 1000
+  burst: null
+  notes: Up to 1,000 records per minute. The Search API is documented with the same per-minute ceiling.
+quotas:
+- name: Credits
   scope: account
   metric: credits
   limit: contract-defined
-  notes: Monthly enrichment credit pool; not publicly documented.
+  notes: >-
+    1 credit = 1 revealed contact. Search, Enrich and account redemptions consume none. Re-redeeming
+    an already-redeemed contact consumes none; a credit is spent again only if the contact's key
+    details change, such as a job move. Each seat includes a credit allocation and more can be
+    purchased mid-contract.
+- name: Entitlements
+  scope: account
+  metric: fields
+  limit: contract-defined
+  notes: >-
+    A field-level licence rather than a rate limit, but it caps what the API will return. Configured
+    by the Cognism Provisioning team; readable at runtime via getContactEntitlement /
+    getAccountEntitlement.
 policies:
-- name: Backoff Strategy
-  description: Honor 429/Retry-After; coordinate quota increases through your Cognism CSM.
+- name: Backoff strategy
+  description: >-
+    On 429, reduce request frequency and retry with backoff. Because no Retry-After is returned,
+    use exponential backoff with jitter rather than a server-supplied delay.
+- name: Batching
+  description: >-
+    Stay inside the per-request ceilings (100 search records, 20 redeem IDs) and pace redeem batches
+    to stay under 1,000 records per minute.
+- name: Spend control
+  description: >-
+    Filter on the preview has* booleans before redeeming. There is no idempotency key, so deduplicate
+    redeemIds client-side to avoid paying twice for a first redemption.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

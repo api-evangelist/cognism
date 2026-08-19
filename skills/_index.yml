@@ -1,0 +1,34 @@
+generated: '2026-08-13'
+method: generated
+source: >-
+  openapi/cognism-api-openapi.yml (derived from the Cognism API Postman collection), plus
+  conventions/, errors/ and the Cognism help centre API articles. Every operationId referenced below
+  exists verbatim in the spec. Cognism publishes no skills or AGENTS.md of its own.
+api: openapi/cognism-api-openapi.yml
+skills:
+- file: cognism-enrich-a-crm-record.md
+  name: Enrich a CRM record with Cognism
+  description: >-
+    Match a contact you already hold to the best Cognism record, read the preview availability flags,
+    check suppression, and redeem the full profile only when it is worth a credit.
+  api: openapi/cognism-api-openapi.yml
+  operations: [enrichContact, redeemContacts, getContactEntitlement, getOptOutByEmail]
+- file: cognism-build-a-prospect-list.md
+  name: Build a prospect list with Cognism
+  description: >-
+    Resolve Cognism's controlled vocabularies, search for a target persona, page forward through the
+    cursor, filter previews for the fields you need, then redeem in batches of twenty.
+  api: openapi/cognism-api-openapi.yml
+  operations: [listIndustries, listJobFunctions, listSeniorityLevels, listManagementLevels,
+    listCountries, listTechnologies, searchContacts, redeemContacts]
+- file: cognism-honor-opt-outs.md
+  name: Honour Cognism opt-outs and entitlements
+  description: >-
+    Sync the GDPR/CCPA opt-out suppression list, check individual records before outreach, respect
+    the per-number DNC flag, and read the entitlement map so an absent field is interpreted correctly.
+  api: openapi/cognism-api-openapi.yml
+  operations: [listOptOutContacts, getOptOutByEmail, getOptOutById, getContactEntitlement,
+    getAccountEntitlement]
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

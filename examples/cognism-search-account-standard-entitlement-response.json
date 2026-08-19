@@ -1,0 +1,31 @@
+{
+  "lastReturnedKey": "efc6d975-8599-38ab-8cfe-e1c42ac16dc6",
+  "totalResults": 1,
+  "results": [
+    {
+      "id": "efc6d975-8599-38ab-8cfe-e1c42ac16dc6",
+      "name": "Cognism",
+      "hasDomain": true,
+      "hasIndustries": true,
+      "hasDescription": true,
+      "hasShortDescription": true,
+      "hasFounded": true,
+      "hasWebsite": true,
+      "hasLinkedinUrl": true,
+      "hasRevenue": true,
+      "hasDepartment": true,
+      "hasSic": true,
+      "hasIsic": false,
+      "hasNaics": true,
+      "hasSize": true,
+      "hasHeadcount": true,
+      "hasTechnologies": true,
+      "hasType": true,
+      "hasCountry": true,
+      "hasState": true,
+      "hasCity": true,
+      "hasZip": true,
+      "hasStreet": true
+    }
+  ]
+}
