@@ -54,25 +54,16 @@ created: '2026-05-08'
 modified: '2026-08-13'
 specificationVersion: '0.23'
 apis:
-- aid: cognism:enrichment
-  name: Cognism Enrichment API
-  description: The Cognism API — Search, Enrich, Redeem, Entitlement, Filter and Compliance
-    endpoints for B2B contact and company data. Search finds records by filter and Enrich
-    matches records you already hold; both return previews with a redeem ID and cost nothing.
-    Redeem exchanges that ID for the full profile and consumes a credit on a contact's first
-    redemption. Fourteen Filter endpoints publish the controlled vocabularies the search
-    filters accept, and the Compliance endpoints expose the GDPR/CCPA opt-out suppression list.
+- aid: cognism:cognism-compliance-api
+  name: Cognism Compliance API
+  description: Opt-out list lookups for GDPR/CCPA suppression.
   humanURL: https://developers.cognism.com/
   baseURL: https://app.cognism.com
   tags:
-  - Enrichment
-  - Contacts
-  - Companies
-  - Search
   - Compliance
   properties:
   - type: OpenAPI
-    url: openapi/cognism-api-openapi.yml
+    url: openapi/cognism-compliance-api-openapi.yml
   - type: Postman
     url: https://developers.cognism.com/
   - type: APIReference
@@ -83,20 +74,157 @@ apis:
     url: https://help.cognism.com/hc/en-gb/articles/34195245226258-How-to-Generate-an-API-Token
   - type: Authentication
     url: https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
-  - type: Overlay
-    url: overlays/cognism-api-overlay.yaml
   - type: ErrorCatalog
     url: errors/cognism-problem-types.yml
   - type: DataModel
     url: data-model/cognism-data-model.yml
   - type: Examples
     url: examples/_index.yml
-  # NO MCPServer pointer: mcp/cognism-mcp.yml records deployment.mode = none. Cognism ships no
-  # MCP server; the tools[] list there is a derived candidate. Pointing at it would credit an
-  # agent surface that does not exist.
+  - type: ContactSales
+    url: https://www.cognism.com/contact
+- aid: cognism:cognism-enrich-api
+  name: Cognism Enrich API
+  description: Match a record you already hold to a Cognism record.
+  humanURL: https://developers.cognism.com/
+  baseURL: https://app.cognism.com
+  tags:
+  - Enrich
+  properties:
+  - type: OpenAPI
+    url: openapi/cognism-enrich-api-openapi.yml
+  - type: Postman
+    url: https://developers.cognism.com/
+  - type: APIReference
+    url: https://developers.cognism.com/
+  - type: Documentation
+    url: https://help.cognism.com/hc/en-gb/articles/37382868352914-Cognism-API-Overview
+  - type: GettingStarted
+    url: https://help.cognism.com/hc/en-gb/articles/34195245226258-How-to-Generate-an-API-Token
+  - type: Authentication
+    url: https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+  - type: ErrorCatalog
+    url: errors/cognism-problem-types.yml
+  - type: DataModel
+    url: data-model/cognism-data-model.yml
+  - type: Examples
+    url: examples/_index.yml
+  - type: ContactSales
+    url: https://www.cognism.com/contact
+- aid: cognism:cognism-entitlement-api
+  name: Cognism Entitlement API
+  description: Read which fields your organisation is licensed for.
+  humanURL: https://developers.cognism.com/
+  baseURL: https://app.cognism.com
+  tags:
+  - Entitlement
+  properties:
+  - type: OpenAPI
+    url: openapi/cognism-entitlement-api-openapi.yml
+  - type: Postman
+    url: https://developers.cognism.com/
+  - type: APIReference
+    url: https://developers.cognism.com/
+  - type: Documentation
+    url: https://help.cognism.com/hc/en-gb/articles/37382868352914-Cognism-API-Overview
+  - type: GettingStarted
+    url: https://help.cognism.com/hc/en-gb/articles/34195245226258-How-to-Generate-an-API-Token
+  - type: Authentication
+    url: https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+  - type: ErrorCatalog
+    url: errors/cognism-problem-types.yml
+  - type: DataModel
+    url: data-model/cognism-data-model.yml
+  - type: Examples
+    url: examples/_index.yml
+  - type: ContactSales
+    url: https://www.cognism.com/contact
+- aid: cognism:cognism-filter-api
+  name: Cognism Filter API
+  description: Reference lists of values the search filters accept.
+  humanURL: https://developers.cognism.com/
+  baseURL: https://app.cognism.com
+  tags:
+  - Filter
+  properties:
+  - type: OpenAPI
+    url: openapi/cognism-filter-api-openapi.yml
+  - type: Postman
+    url: https://developers.cognism.com/
+  - type: APIReference
+    url: https://developers.cognism.com/
+  - type: Documentation
+    url: https://help.cognism.com/hc/en-gb/articles/37382868352914-Cognism-API-Overview
+  - type: GettingStarted
+    url: https://help.cognism.com/hc/en-gb/articles/34195245226258-How-to-Generate-an-API-Token
+  - type: Authentication
+    url: https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+  - type: ErrorCatalog
+    url: errors/cognism-problem-types.yml
+  - type: DataModel
+    url: data-model/cognism-data-model.yml
+  - type: Examples
+    url: examples/_index.yml
+  - type: ContactSales
+    url: https://www.cognism.com/contact
+- aid: cognism:cognism-redeem-api
+  name: Cognism Redeem API
+  description: Exchange a redeem ID for the full record.
+  humanURL: https://developers.cognism.com/
+  baseURL: https://app.cognism.com
+  tags:
+  - Redeem
+  properties:
+  - type: OpenAPI
+    url: openapi/cognism-redeem-api-openapi.yml
+  - type: Postman
+    url: https://developers.cognism.com/
+  - type: APIReference
+    url: https://developers.cognism.com/
+  - type: Documentation
+    url: https://help.cognism.com/hc/en-gb/articles/37382868352914-Cognism-API-Overview
+  - type: GettingStarted
+    url: https://help.cognism.com/hc/en-gb/articles/34195245226258-How-to-Generate-an-API-Token
+  - type: Authentication
+    url: https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+  - type: ErrorCatalog
+    url: errors/cognism-problem-types.yml
+  - type: DataModel
+    url: data-model/cognism-data-model.yml
+  - type: Examples
+    url: examples/_index.yml
+  - type: ContactSales
+    url: https://www.cognism.com/contact
+- aid: cognism:cognism-search-api
+  name: Cognism Search API
+  description: Find contacts and companies matching a filter set.
+  humanURL: https://developers.cognism.com/
+  baseURL: https://app.cognism.com
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/cognism-search-api-openapi.yml
+  - type: Postman
+    url: https://developers.cognism.com/
+  - type: APIReference
+    url: https://developers.cognism.com/
+  - type: Documentation
+    url: https://help.cognism.com/hc/en-gb/articles/37382868352914-Cognism-API-Overview
+  - type: GettingStarted
+    url: https://help.cognism.com/hc/en-gb/articles/34195245226258-How-to-Generate-an-API-Token
+  - type: Authentication
+    url: https://help.cognism.com/hc/en-gb/articles/37383428888978-API-Authentication-Credits
+  - type: ErrorCatalog
+    url: errors/cognism-problem-types.yml
+  - type: DataModel
+    url: data-model/cognism-data-model.yml
+  - type: Examples
+    url: examples/_index.yml
   - type: ContactSales
     url: https://www.cognism.com/contact
 common:
+- type: Overlay
+  url: overlays/cognism-api-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/cognism-agentic-access.yml
 - type: Authentication
