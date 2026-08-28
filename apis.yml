@@ -15,6 +15,18 @@ description: >-
   fields the account is licensed to receive. API access is sales-gated: it must be enabled on
   the subscription, field-level entitlements provisioned by Cognism, and a six-month bearer
   token generated in the application.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: sales-led
   onboarding: sales-gated
