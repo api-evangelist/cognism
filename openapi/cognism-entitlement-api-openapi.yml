@@ -1,0 +1,254 @@
+openapi: 3.2.0
+info:
+  title: Cognism Entitlement API
+  version: '2026-08-13'
+  summary: Search, enrich and redeem B2B contact and company data from the Cognism database.
+  description: 'The Cognism API is used to search, preview and enrich Contacts and Accounts.
+
+
+    It is composed of three services that are used together:
+
+
+    - **Search API** - find contacts or companies matching a filter set. Returns preview records, each carrying a `redeemId`.
+
+    - **Enrich API** - find the best matching Cognism record for a contact or company you already hold. Returns a preview, a `matchScore` and a `redeemId`.
+
+    - **Redeem API** - exchange a `redeemId` for the full record.
+
+
+    Search and Enrich return preview data only and do not consume Credits. Credits are consumed when a contact is redeemed for the first time; account redemptions and repeat contact redemptions are free.
+
+
+    The fields a Redeem response carries are governed by your organisation API Entitlements, configured by Cognism. Query the Entitlement API to read them.
+
+
+    API access is sales-gated: it must be enabled on your subscription, entitlements configured by the Cognism Provisioning team, and an API token generated in the Cognism app under Settings > Tokens and API.
+
+
+    _Derived by API Evangelist from the Cognism API Postman collection published by Cognism at https://developers.cognism.com/ . Not an official Cognism artifact._'
+  contact:
+    name: Cognism
+    url: https://www.cognism.com/contact
+  termsOfService: https://www.cognism.com/terms-of-website-use
+  x-source: https://documenter.gw.postman.com/api/collections/14862827/UVJhBu4C
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-on: '2026-08-13'
+servers:
+- url: https://app.cognism.com
+  description: Production. Value of the `baseUrl` variable in the Production environment published with the Cognism API Postman collection.
+security:
+- bearerAuth: []
+tags:
+- name: Entitlement
+  description: Read which fields your organisation is licensed for.
+paths:
+  /api/search/entitlement/contactEntitlementSubscription:
+    get:
+      operationId: getContactEntitlement
+      summary: Get contact entitlement details
+      description: Return the contact fields your organisation is entitled to receive from the Redeem API. Entitlements are configured by the Cognism Provisioning team.
+      tags:
+      - Entitlement
+      responses:
+        '200':
+          description: Contact entitlement map.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactEntitlement'
+              examples:
+                ContactAdvancedEntitlement:
+                  summary: Contact Advanced Entitlement
+                  value:
+                    contact Entitlement:
+                      city: false
+                      lastConfirmed: true
+                      zip: true
+                      directPhoneNumbers: false
+                      mobilePhoneNumbers: false
+                      privacyNotificationSent: false
+                      locationMoveEvent: false
+                      lastName: true
+                      education: true
+                      jobLeaveEvent: false
+                      region: true
+                      managementLevel: true
+                      jobTitle: true
+                      email: true
+                      positionStartDate: true
+                      state: true
+                      officePhoneNumbers: true
+                      fullName: true
+                      searchOptions: true
+                      country: true
+                      firstName: true
+                      id: true
+                      jobFunction: true
+                      previousAccount: true
+                      hqPhoneNumbers: false
+                      jobJoinEvent: false
+                      linkedinUrl: true
+                      skills: true
+                      seniority: true
+                      street: true
+                      account: true
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/entitlement/accountEntitlementSubscription:
+    get:
+      operationId: getAccountEntitlement
+      summary: Get account entitlement details
+      description: Return the account fields your organisation is entitled to receive from the Redeem API.
+      tags:
+      - Entitlement
+      responses:
+        '200':
+          description: Account entitlement map.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountEntitlement'
+              examples:
+                AccountAdvancedEntitlement:
+                  summary: Account Advanced Entitlement
+                  value:
+                    account Entitlement:
+                      website: true
+                      name: true
+                      location: true
+                      founded: true
+                      shortDescription: true
+                      industry: true
+                      acquisitionEvent: false
+                      id: true
+                      appearanceEvent: false
+                      hiringEvent: false
+                      linkedinUrl: true
+                      type: true
+                      sic: true
+                      accountSearchOptions: true
+                      headcount: true
+                      size: true
+                      fundingEvent: false
+                      description: true
+                      naics: true
+                      officePhoneNumbers: false
+                      domain: true
+                      ipoEvent: false
+                      technology: true
+                      revenue: true
+                      isic: true
+                      hqPhoneNumbers: false
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ContactEntitlement:
+      type: object
+      description: Map of contact field name to whether the organisation is entitled to it.
+      properties:
+        contact Entitlement:
+          type: object
+          additionalProperties:
+            type: boolean
+    AccountEntitlement:
+      type: object
+      description: Map of account field name to whether the organisation is entitled to it.
+      properties:
+        account Entitlement:
+          type: object
+          additionalProperties:
+            type: boolean
+    Error:
+      type: array
+      description: Cognism returns errors as an array of error objects.
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            description: Machine-readable error key, e.g. MissingCredentials.
+          code:
+            type: integer
+            description: HTTP status code, repeated in the body.
+          msg:
+            type: string
+            description: Human-readable message.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token issued in the Cognism app under Settings > Tokens and API. Sent as `Authorization: Bearer <token>`. Tokens have a time-to-live of 6 months.'
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Alternative to the Authorization header. Cognism documents it but recommends the header instead, as the query string is less secure.

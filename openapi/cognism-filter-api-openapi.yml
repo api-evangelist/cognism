@@ -1,0 +1,796 @@
+openapi: 3.2.0
+info:
+  title: Cognism Filter API
+  version: '2026-08-13'
+  summary: Search, enrich and redeem B2B contact and company data from the Cognism database.
+  description: 'The Cognism API is used to search, preview and enrich Contacts and Accounts.
+
+
+    It is composed of three services that are used together:
+
+
+    - **Search API** - find contacts or companies matching a filter set. Returns preview records, each carrying a `redeemId`.
+
+    - **Enrich API** - find the best matching Cognism record for a contact or company you already hold. Returns a preview, a `matchScore` and a `redeemId`.
+
+    - **Redeem API** - exchange a `redeemId` for the full record.
+
+
+    Search and Enrich return preview data only and do not consume Credits. Credits are consumed when a contact is redeemed for the first time; account redemptions and repeat contact redemptions are free.
+
+
+    The fields a Redeem response carries are governed by your organisation API Entitlements, configured by Cognism. Query the Entitlement API to read them.
+
+
+    API access is sales-gated: it must be enabled on your subscription, entitlements configured by the Cognism Provisioning team, and an API token generated in the Cognism app under Settings > Tokens and API.
+
+
+    _Derived by API Evangelist from the Cognism API Postman collection published by Cognism at https://developers.cognism.com/ . Not an official Cognism artifact._'
+  contact:
+    name: Cognism
+    url: https://www.cognism.com/contact
+  termsOfService: https://www.cognism.com/terms-of-website-use
+  x-source: https://documenter.gw.postman.com/api/collections/14862827/UVJhBu4C
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-on: '2026-08-13'
+servers:
+- url: https://app.cognism.com
+  description: Production. Value of the `baseUrl` variable in the Production environment published with the Cognism API Postman collection.
+security:
+- bearerAuth: []
+tags:
+- name: Filter
+  description: Reference lists of values the search filters accept.
+paths:
+  /api/search/filter/technologiesSearch:
+    get:
+      operationId: listTechnologies
+      summary: List supported technologies
+      description: Reference list of technology values accepted by the `technologies` search filter. Use the optional `search` parameter to filter the list.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      parameters:
+      - name: search
+        in: query
+        required: false
+        description: Substring to match technology names against.
+        schema:
+          type: string
+      - name: indexSize
+        in: query
+        required: false
+        description: Records per page.
+        schema:
+          type: integer
+          default: 20
+      - name: lastReturnedKey
+        in: query
+        required: false
+        description: Forward-only paging cursor.
+        schema:
+          type: string
+  /api/search/filter/managementLevels:
+    get:
+      operationId: listManagementLevels
+      summary: List management levels
+      description: Reference list of values accepted by the `managementLevel` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/companySizes:
+    get:
+      operationId: listCompanySizes
+      summary: List company sizes
+      description: Reference list of company size bands accepted by the account size filters.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/industries:
+    get:
+      operationId: listIndustries
+      summary: List industries
+      description: Reference list of values accepted by the `industries` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/jobFunctions:
+    get:
+      operationId: listJobFunctions
+      summary: List job functions
+      description: Reference list of values accepted by the `jobFunctions` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/regions:
+    get:
+      operationId: listRegions
+      summary: List world regions
+      description: Reference list of values accepted by the `regions` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/countries:
+    get:
+      operationId: listCountries
+      summary: List countries
+      description: Reference list of values accepted by the `countries` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/states:
+    get:
+      operationId: listStates
+      summary: List states
+      description: Reference list of values accepted by the `states` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/sic:
+    get:
+      operationId: listSicCodes
+      summary: List SIC codes
+      description: Reference list of SIC codes accepted by the `sic` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/isic:
+    get:
+      operationId: listIsicCodes
+      summary: List ISIC codes
+      description: Reference list of ISIC codes accepted by the `isic` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/naics:
+    get:
+      operationId: listNaicsCodes
+      summary: List NAICS codes
+      description: Reference list of NAICS codes accepted by the `naics` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/skills:
+    get:
+      operationId: listSkills
+      summary: List skills
+      description: Reference list of values accepted by the `skills` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/companyTypes:
+    get:
+      operationId: listCompanyTypes
+      summary: List company types
+      description: Reference list of values accepted by the `types` account search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/filter/seniority:
+    get:
+      operationId: listSeniorityLevels
+      summary: List seniority levels
+      description: Reference list of values accepted by the `seniority` search filter.
+      tags:
+      - Filter
+      responses:
+        '200':
+          description: Reference values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterValues'
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: array
+      description: Cognism returns errors as an array of error objects.
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            description: Machine-readable error key, e.g. MissingCredentials.
+          code:
+            type: integer
+            description: HTTP status code, repeated in the body.
+          msg:
+            type: string
+            description: Human-readable message.
+    FilterValues:
+      type: array
+      description: Reference list of values accepted by the matching Search API filter.
+      items:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token issued in the Cognism app under Settings > Tokens and API. Sent as `Authorization: Bearer <token>`. Tokens have a time-to-live of 6 months.'
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Alternative to the Authorization header. Cognism documents it but recommends the header instead, as the query string is less secure.

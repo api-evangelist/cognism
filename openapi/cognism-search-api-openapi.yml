@@ -1,0 +1,1718 @@
+openapi: 3.2.0
+info:
+  title: Cognism Search API
+  version: '2026-08-13'
+  summary: Search, enrich and redeem B2B contact and company data from the Cognism database.
+  description: 'The Cognism API is used to search, preview and enrich Contacts and Accounts.
+
+
+    It is composed of three services that are used together:
+
+
+    - **Search API** - find contacts or companies matching a filter set. Returns preview records, each carrying a `redeemId`.
+
+    - **Enrich API** - find the best matching Cognism record for a contact or company you already hold. Returns a preview, a `matchScore` and a `redeemId`.
+
+    - **Redeem API** - exchange a `redeemId` for the full record.
+
+
+    Search and Enrich return preview data only and do not consume Credits. Credits are consumed when a contact is redeemed for the first time; account redemptions and repeat contact redemptions are free.
+
+
+    The fields a Redeem response carries are governed by your organisation API Entitlements, configured by Cognism. Query the Entitlement API to read them.
+
+
+    API access is sales-gated: it must be enabled on your subscription, entitlements configured by the Cognism Provisioning team, and an API token generated in the Cognism app under Settings > Tokens and API.
+
+
+    _Derived by API Evangelist from the Cognism API Postman collection published by Cognism at https://developers.cognism.com/ . Not an official Cognism artifact._'
+  contact:
+    name: Cognism
+    url: https://www.cognism.com/contact
+  termsOfService: https://www.cognism.com/terms-of-website-use
+  x-source: https://documenter.gw.postman.com/api/collections/14862827/UVJhBu4C
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-on: '2026-08-13'
+servers:
+- url: https://app.cognism.com
+  description: Production. Value of the `baseUrl` variable in the Production environment published with the Cognism API Postman collection.
+security:
+- bearerAuth: []
+tags:
+- name: Search
+  description: Find contacts and companies matching a filter set.
+paths:
+  /api/search/contact/search:
+    post:
+      operationId: searchContacts
+      summary: Search contacts
+      description: Search the Cognism database for contacts matching your filters. Returns preview records with a `redeemId` for each match. Search does not consume Credits. Supports 20-100 records per request and up to 1,000 records per minute.
+      tags:
+      - Search
+      parameters:
+      - name: indexSize
+        in: query
+        required: false
+        description: Records per page (20-100).
+        schema:
+          type: integer
+          minimum: 20
+          maximum: 100
+          default: 25
+      - name: lastReturnedKey
+        in: query
+        required: false
+        description: Forward-only paging cursor returned by the previous response.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactSearchRequest'
+            examples:
+              byNameAndCompany:
+                summary: Search Contacts (collection example)
+                value:
+                  firstName: Stjepan
+                  lastName: Buljat
+                  jobTitles:
+                  - Chief Innovation Officer
+                  excludeJobTitles:
+                  - CEO
+                  regions:
+                  - EMEA
+                  mobilePhoneNumbers:
+                    highPlus: true
+                  emailQuality:
+                    highPlus: true
+                  account:
+                    names:
+                    - Cognism
+                    officePhoneNumbers:
+                      medium: true
+      responses:
+        '200':
+          description: Matching contact previews.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactSearchResponse'
+              examples:
+                SearchContactsAdvancedEntitlement:
+                  summary: Search Contacts Advanced Entitlement
+                  value:
+                    lastReturnedKey: 1714687499208_~34d633b7-41ea-3ac7-a280-431d71fd77eb
+                    totalResults: 1
+                    results:
+                    - id: 34d633b7-41ea-3ac7-a280-431d71fd77eb
+                      firstName: Stjepan
+                      jobTitle: Chief Innovation Officer
+                      account:
+                        name: Cognism
+                        id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                        hasOfficePhoneNumbers: true
+                        hasHqPhoneNumbers: false
+                        hasHiringEvent: true
+                        hasHeadcount: true
+                        hasSize: true
+                        hasLocation: true
+                        hasTechnologies: true
+                        hasType: true
+                        hasDomain: true
+                        hasIndustry: true
+                        hasRevenue: true
+                        hasLinkedinUrl: true
+                        hasWebsite: true
+                        hasFounded: true
+                        hasLastConfirmed: true
+                        hasNaics: true
+                        hasIsic: false
+                        hasSic: true
+                        hasShortDescription: true
+                        hasDescription: true
+                      lastName: Buljat
+                      fullName: Stjepan Buljat
+                      hasPreviousAccounts: true
+                      hasSkills: true
+                      hasLocationMoveEvent: false
+                      hasLinkedinUrl: true
+                      hasEmail: true
+                      hasEducation: true
+                      hasZip: false
+                      hasState: false
+                      hasCountry: true
+                      hasCity: false
+                      hasRegion: false
+                      hasJobLeaveEvent: true
+                      hasJobJoinEvent: true
+                      hasStreet: false
+                      hasDirectPhoneNumbers: false
+                      hasMobilePhoneNumbers: false
+                      hasPositionStartDate: true
+                      hasSeniority: false
+                      hasJobFunction: true
+                      hasManagementLevel: true
+                      hasLastConfirmed: true
+                      redeemId: MzRkNjMzYjctNDFlYS0zYWM3LWEyODAtNDMxZDcxZmQ3N2ViO2IxMjBjOTdhLTlhNTItM2E3Zi1iNzNiLTg3MGUzYjQ0M2MxOTtlZmM2ZDk3NS04NTk5LTM4YWItOGNmZS1lMWM0MmFjMTZkYzY=
+                SearchContactsStandardEntitlement:
+                  summary: Search Contacts Standard Entitlement
+                  value:
+                    lastReturnedKey: 1714687499208_~34d633b7-41ea-3ac7-a280-431d71fd77eb
+                    totalResults: 1
+                    results:
+                    - id: 34d633b7-41ea-3ac7-a280-431d71fd77eb
+                      firstName: Stjepan
+                      jobTitle: Chief Innovation Officer
+                      account:
+                        name: Cognism
+                        id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                        hasHeadcount: true
+                        hasSize: true
+                        hasTechnologies: true
+                        hasType: true
+                        hasDomain: true
+                        hasRevenue: true
+                        hasWebsite: true
+                        hasFounded: true
+                        hasNaics: true
+                        hasIsic: false
+                        hasSic: true
+                        hasShortDescription: true
+                        hasDescription: true
+                      lastName: Buljat
+                      fullName: Stjepan Buljat
+                      hasSkills: true
+                      hasLinkedinUrl: true
+                      hasEmail: true
+                      hasEducation: true
+                      hasZip: false
+                      hasState: false
+                      hasCountry: true
+                      hasCity: false
+                      hasStreet: false
+                      hasPositionStartDate: true
+                      hasSeniority: false
+                      hasJobFunction: true
+                      hasManagementLevel: true
+                      hasLastConfirmed: true
+                      redeemId: MzRkNjMzYjctNDFlYS0zYWM3LWEyODAtNDMxZDcxZmQ3N2ViO2IxMjBjOTdhLTlhNTItM2E3Zi1iNzNiLTg3MGUzYjQ0M2MxOTtlZmM2ZDk3NS04NTk5LTM4YWItOGNmZS1lMWM0MmFjMTZkYzY=
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/account/search:
+    post:
+      operationId: searchAccounts
+      summary: Search accounts
+      description: Search the Cognism database for companies matching your filters. Returns preview records. Search does not consume Credits.
+      tags:
+      - Search
+      parameters:
+      - name: indexSize
+        in: query
+        required: false
+        description: Records per page (20-100).
+        schema:
+          type: integer
+          minimum: 20
+          maximum: 100
+          default: 100
+      - name: lastReturnedKey
+        in: query
+        required: false
+        description: Forward-only paging cursor returned by the previous response.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountSearchRequest'
+            examples:
+              byNameAndDomain:
+                summary: Search Accounts (collection example)
+                value:
+                  names:
+                  - Cognism
+                  domains:
+                  - cognism.com
+                  accountSearchOptions:
+                    match_exact_account_name: true
+                    match_exact_domain: false
+                    filter_domain: exists
+                    events_operator: AND
+      responses:
+        '200':
+          description: Matching account previews.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountSearchResponse'
+              examples:
+                SearchAccountAdvancedEntitlement:
+                  summary: Search Account Advanced Entitlement
+                  value:
+                    lastReturnedKey: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                    totalResults: 1
+                    results:
+                    - id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                      name: Cognism
+                      hasDomain: true
+                      hasIndustries: true
+                      hasDescription: true
+                      hasShortDescription: true
+                      hasFounded: true
+                      hasWebsite: true
+                      hasLinkedinUrl: true
+                      hasRevenue: true
+                      hasDepartment: true
+                      hasSic: true
+                      hasIsic: false
+                      hasNaics: true
+                      hasSize: true
+                      hasHeadcount: true
+                      hasTechnologies: true
+                      hasType: true
+                      hasCountry: true
+                      hasState: true
+                      hasCity: true
+                      hasZip: true
+                      hasStreet: true
+                      hasOfficePhoneNumbers: false
+                      hasHqPhoneNumbers: true
+                      hasHiringEvent: false
+                SearchAccountStandardEntitlement:
+                  summary: Search Account Standard Entitlement
+                  value:
+                    lastReturnedKey: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                    totalResults: 1
+                    results:
+                    - id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                      name: Cognism
+                      hasDomain: true
+                      hasIndustries: true
+                      hasDescription: true
+                      hasShortDescription: true
+                      hasFounded: true
+                      hasWebsite: true
+                      hasLinkedinUrl: true
+                      hasRevenue: true
+                      hasDepartment: true
+                      hasSic: true
+                      hasIsic: false
+                      hasNaics: true
+                      hasSize: true
+                      hasHeadcount: true
+                      hasTechnologies: true
+                      hasType: true
+                      hasCountry: true
+                      hasState: true
+                      hasCity: true
+                      hasZip: true
+                      hasStreet: true
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ContactPreview:
+      type: object
+      description: Preview projection of a contact. `has*` booleans advertise which fields the full record carries. `redeemId` is the key for the Redeem API.
+      properties:
+        id:
+          type: string
+        redeemId:
+          type: string
+        fullName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        jobTitle:
+          type: string
+        account:
+          $ref: '#/components/schemas/AccountPreview'
+        hasEmail:
+          type: boolean
+        hasMobilePhoneNumbers:
+          type: boolean
+        hasDirectPhoneNumbers:
+          type: boolean
+        hasLinkedinUrl:
+          type: boolean
+        hasSkills:
+          type: boolean
+        hasEducation:
+          type: boolean
+        hasPreviousAccounts:
+          type: boolean
+        hasSeniority:
+          type: boolean
+        hasJobFunction:
+          type: boolean
+        hasManagementLevel:
+          type: boolean
+        hasPositionStartDate:
+          type: boolean
+        hasLastConfirmed:
+          type: boolean
+      additionalProperties: true
+    AccountSearchRequest:
+      type: object
+      description: Filter set for the Search API account (company) endpoint.
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Account Cognism unique id
+        excludeIds:
+          type: array
+          items:
+            type: string
+          description: Exclude rom search Account Cognism unique id
+        names:
+          type: array
+          items:
+            type: string
+          description: Account names
+        excludeNames:
+          type: array
+          items:
+            type: string
+          description: Account exclude names
+        domains:
+          type: array
+          items:
+            type: string
+          description: Account domains
+        excludeDomains:
+          type: array
+          items:
+            type: string
+          description: Account exclude domains
+        websites:
+          type: array
+          items:
+            type: string
+          description: Account websites
+        description:
+          type: string
+          description: Account description (keyword)
+        excludeDescription:
+          type: string
+          description: Account exclude description (keyword). Exclude all accounts containing any word from excludeDescription string
+        shortDescription:
+          type: string
+          description: Account short description (keyword)
+        keywords:
+          type: array
+          items:
+            type: string
+          description: Account keywords
+        revenue:
+          type: object
+          properties:
+            from:
+              type: integer
+              description: Account revenue range from
+            to:
+              type: integer
+              description: Account revenue range to
+        founded:
+          type: object
+          properties:
+            from:
+              type: integer
+              description: Account founded year range from
+            to:
+              type: integer
+              description: Account founded year range to
+        types:
+          type: array
+          items:
+            type: string
+            enum:
+            - Public Company
+            - Educational
+            - Educational Institution
+            - Government Agency
+            - Partnership
+            - Privately Held
+            - Self-Employed
+            - non profit
+          description: 'Account type. Allowed values: Public Company , Educational , Educational Institution , Government Agency , Partnership , Privately Held , Self-Employed , non profit'
+        regions:
+          type: array
+          items:
+            type: string
+          description: Account world regions. Check allowed values Regions
+        countries:
+          type: array
+          items:
+            type: string
+          description: Account countries. Check allowed values Countries
+        excludeCountries:
+          type: array
+          items:
+            type: string
+          description: Account excluded countries. Check allowed values Countries
+        states:
+          type: array
+          items:
+            type: string
+          description: Account states. Check allowed values States
+        excludeStates:
+          type: array
+          items:
+            type: string
+          description: Account excluded states. Check allowed values States
+        cities:
+          type: array
+          items:
+            type: string
+          description: Account cities.
+        excludeCities:
+          type: array
+          items:
+            type: string
+          description: Account excluded cities.
+        zip:
+          type: array
+          items:
+            type: string
+          description: Account zip codes.
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              country:
+                type: string
+                description: Account location country
+              city:
+                type: string
+                description: Account location city
+              state:
+                type: string
+                description: Account location state
+              zip:
+                type: string
+                description: Account location ZIP or postal code
+          description: Array of object containing country, city, state and zip codes. OR logic is applied between objects
+        industries:
+          type: array
+          items:
+            type: string
+          description: Account industries. Check allowed values Industries
+        excludeIndustries:
+          type: array
+          items:
+            type: string
+          description: Account excluded industries. Check allowed values Industries
+        sic:
+          type: array
+          items:
+            type: string
+          description: Account SIC codes. Check allowed values SIC Codes
+        isic:
+          type: array
+          items:
+            type: string
+          description: Account ISIC codes. Check allowed values ISIC Codes
+        naics:
+          type: array
+          items:
+            type: string
+          description: Account NAICS codes. Check allowed values NAICS Codes
+        headcount:
+          type: object
+          properties:
+            from:
+              type: integer
+              description: Account minimum headcount
+            to:
+              type: integer
+              description: Account maximum headcount
+        technologies:
+          type: array
+          items:
+            type: string
+          description: Account technologies used. Check allowed values Technologies
+        excludeTechnologies:
+          type: array
+          items:
+            type: string
+          description: Account exclude technologies used. Check allowed values Technologies
+        lastConfirmed:
+          type: object
+          properties:
+            from:
+              type: integer
+              description: Account profile time updated range from. (Unix timestamp in milliseconds)
+            to:
+              type: integer
+              description: Account profile time updated range to. (Unix timestamp in milliseconds)
+        hqPhoneNumbers:
+          type: object
+          properties:
+            medium:
+              type: boolean
+              description: Account with medium quality HQ phone numbers
+            high:
+              type: boolean
+              description: Account with high quality HQ phone numbers
+            highPlus:
+              type: boolean
+              description: Account with highPlus quality HQ phone numbers
+        officePhoneNumbers:
+          type: object
+          properties:
+            medium:
+              type: boolean
+              description: Account with medium quality office phone numbers
+            high:
+              type: boolean
+              description: Account with high quality office phone numbers
+            highPlus:
+              type: boolean
+              description: Account with highPlus quality office phone numbers
+        hiringEvent:
+          type: object
+          properties:
+            eventDateFrom:
+              type: integer
+              description: Account hiring event date range from (Unix timestamp in milliseconds)
+            eventDateTo:
+              type: integer
+              description: Account hiring event date range to (Unix timestamp in milliseconds)
+            jobTitle:
+              type: array
+              items:
+                type: string
+              description: Account hiring event job title
+            department:
+              type: string
+              enum:
+              - legal
+              - it
+              - administration
+              - marketing
+              - sales
+              - R&D
+              - customer
+              - operations
+              - finance
+              description: 'Account hiring event hiring department. Allowed values: legal, it, administration, marketing, sales, R&D, customer, operations, finance'
+            country:
+              type: array
+              items:
+                type: string
+              description: Account hiring event job place countries
+            state:
+              type: array
+              items:
+                type: string
+              description: Account hiring event job place states
+            city:
+              type: array
+              items:
+                type: string
+              description: Account hiring event job place cities
+        fundingEvent:
+          type: object
+          properties:
+            eventDateFrom:
+              type: integer
+              description: Start date (timestamp) of the funding event
+            eventDateTo:
+              type: integer
+              description: End date (timestamp) of the funding event
+            fundingType:
+              type: array
+              items:
+                type: string
+                enum:
+                - venture
+                - seed
+                - grant
+                - private_equity
+                - angel
+                - debt_financing
+                - corporate_round
+                - convertible note
+                - equity_crowfunding
+              description: 'Types of funding rounds. Allowed values: venture, seed, grant, private_equity, angel, debt_financing, corporate_round, convertible note, equity_crowfunding'
+            series:
+              type: array
+              items:
+                type: string
+                enum:
+                - A
+                - B
+                - C
+                - D
+                - E
+                - F
+                - G
+                - H
+                - I
+                - J
+                - K
+              description: 'Series classifications of the funding event. Allowed values: A, B, C, D, E, F, G, H, I, J, K'
+        ipoEvent:
+          type: object
+          properties:
+            eventDateFrom:
+              type: integer
+              description: Start date (timestamp) of the IPO event
+            eventDateTo:
+              type: integer
+              description: End date (timestamp) of the IPO event
+        acquisitionEvent:
+          type: object
+          properties:
+            eventDateFrom:
+              type: integer
+              description: Start date (timestamp) of the acquisition event
+            eventDateTo:
+              type: integer
+              description: End date (timestamp) of the acquisition event
+            acquirer:
+              type: array
+              items:
+                type: string
+              description: Names of acquiring companies
+            acquiree:
+              type: array
+              items:
+                type: string
+              description: Names of acquired companies
+        accountSearchOptions:
+          type: object
+          properties:
+            match_exact_account_name:
+              type: boolean
+            match_exact_domain:
+              type: boolean
+            filter_email:
+              type: string
+              enum:
+              - exists
+              - missing
+              description: 'Allowed values: exists, missing'
+            show_max_events:
+              type: integer
+            filter_domain:
+              type: string
+              enum:
+              - exists
+              - missing
+              description: 'Allowed values: exists, missing'
+            location_type:
+              type: string
+              enum:
+              - ALL
+              - HQ
+              description: 'Allowed values: ALL, HQ'
+            events_operator:
+              type: string
+              enum:
+              - AND
+              - OR
+              description: 'Allowed values: AND, OR Default value is OR'
+            sort_fields:
+              type: array
+              items:
+                type: string
+                enum:
+                - LastConfirmedAccountDESC
+                - LastConfirmedAccountASC
+                - SizeDESC
+                - SizeASC
+                - RevenueDESC
+                - RevenueASC
+              description: 'Allowed values: LastConfirmedAccountDESC, LastConfirmedAccountASC, SizeDESC, SizeASC, RevenueDESC, RevenueASC'
+            operators:
+              type: object
+              properties:
+                technologies:
+                  type: string
+                  enum:
+                  - AND
+                  - OR
+                  description: 'Allowed values: AND, OR'
+                excludeTechnologies:
+                  type: string
+                  enum:
+                  - AND
+                  - OR
+                  description: 'Allowed values: AND, OR'
+      additionalProperties: false
+    Error:
+      type: array
+      description: Cognism returns errors as an array of error objects.
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            description: Machine-readable error key, e.g. MissingCredentials.
+          code:
+            type: integer
+            description: HTTP status code, repeated in the body.
+          msg:
+            type: string
+            description: Human-readable message.
+    ContactSearchRequest:
+      type: object
+      description: Filter set for the Search API contact endpoint. Every field is optional; filters combine with AND unless the field documents otherwise.
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Contact ids. Can be either ids or redeemIds. Mix of ids and redeem ids in the single request is not supported
+        excludeIds:
+          type: array
+          items:
+            type: string
+          description: Exclude contact ids. Can be either ids or redeemIds. Mix of ids and redeem ids in the single request is not supported
+        fullName:
+          type: string
+          description: Contact name
+        firstName:
+          type: string
+          description: Contact first name
+        lastName:
+          type: string
+          description: Contact last name
+        jobTitles:
+          type: array
+          items:
+            type: string
+          description: Contact current position job titles
+        excludeJobTitles:
+          type: array
+          items:
+            type: string
+          description: Contact current position excluded job titles
+        seniority:
+          type: array
+          items:
+            type: string
+            enum:
+            - Manager
+            - Director
+            - Partner
+            - CXO
+            - Owner
+            - VP
+          description: 'Contact current position seniority. Allowed values: Manager, Director, Partner, CXO, Owner, VP'
+        jobFunctions:
+          type: array
+          items:
+            type: string
+            enum:
+            - Oversight
+            - Technology
+            - Operations
+            - Sales
+            - Marketing
+            - Client Success
+            - HR
+            - Accounting
+            - Business
+            - Production
+          description: 'Contact current position job functions. Allowed values: Oversight, Technology, Operations, Sales, Marketing, Client Success, HR, Accounting, Business, Production'
+        managementLevel:
+          type: array
+          items:
+            type: string
+            enum:
+            - Entry-Level
+            - Team-Lead
+            - Experienced Staff
+            - Executive-Level
+            - Senior Leadership
+            - Middle-Management
+            - CxO
+          description: 'Contact current position management levels. Allowed values: Entry-Level, Team-Lead, Experienced Staff, Executive-Level, Senior Leadership, Middle-Management, CxO'
+        regions:
+          type: array
+          items:
+            type: string
+          description: Contact location world regions. Check allowed values Regions
+        countries:
+          type: array
+          items:
+            type: string
+          description: Contact location countries. Check allowed values Countries
+        excludeCountries:
+          type: array
+          items:
+            type: string
+          description: Contact location excluded countries. Check allowed values Countries
+        states:
+          type: array
+          items:
+            type: string
+          description: Contact location states. Check allowed values States
+        excludeStates:
+          type: array
+          items:
+            type: string
+          description: Contact location excluded states. Check allowed values States
+        cities:
+          type: array
+          items:
+            type: string
+          description: Contact location cities
+        excludeCities:
+          type: array
+          items:
+            type: string
+          description: Contact location excluded cities
+        zip:
+          type: array
+          items:
+            type: string
+          description: Contact location zip codes
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              country:
+                type: string
+                description: Contact location country
+              city:
+                type: string
+                description: Contact location city
+              state:
+                type: string
+                description: Contact location state
+              zip:
+                type: string
+                description: Contact location ZIP or postal code
+          description: Array of object containing country, city, state and zip codes. OR logic is applied between objects
+        skills:
+          type: array
+          items:
+            type: string
+          description: Contact skills. Check allowed values Skills
+        excludeSkills:
+          type: array
+          items:
+            type: string
+          description: Contact excluded skills. Check allowed values Skills
+        linkedinUrl:
+          type: string
+          description: Contact LinkedIn URL
+        education:
+          type: object
+          properties:
+            schools:
+              type: array
+              items:
+                type: string
+              description: Contact education school name
+            degrees:
+              type: array
+              items:
+                type: string
+              description: Contact education degree name
+        mobilePhoneNumbers:
+          type: object
+          properties:
+            medium:
+              type: boolean
+              description: Search contacts with medium quality mobile phone numbers
+            high:
+              type: boolean
+              description: Search contacts with high quality mobile phone numbers
+            highPlus:
+              type: boolean
+              description: Search contacts with highPlus quality mobile phone numbers
+        directPhoneNumbers:
+          type: object
+          properties:
+            medium:
+              type: boolean
+              description: Search contacts with medium quality direct phone numbers
+            high:
+              type: boolean
+              description: Search contacts with high quality direct phone numbers
+            highPlus:
+              type: boolean
+              description: Search contacts with highPlus quality direct phone numbers
+        emailQuality:
+          type: object
+          properties:
+            medium:
+              type: boolean
+              description: Search contacts with medium quality email
+            high:
+              type: boolean
+              description: Search contacts with high quality email
+            highPlus:
+              type: boolean
+              description: Search contacts with highPlus quality email
+        sha256:
+          type: array
+          items:
+            type: string
+          description: Search contacts by sha256 hashed email
+        lastConfirmed:
+          type: object
+          properties:
+            from:
+              type: integer
+              description: Contact profile time updated range from. (Unix timestamp in milliseconds)
+            to:
+              type: integer
+              description: Contact profile time updated range to. (Unix timestamp in milliseconds)
+        account:
+          type: object
+          properties:
+            ids:
+              type: array
+              items:
+                type: string
+              description: Contact's current account ids.
+            excludeIds:
+              type: array
+              items:
+                type: string
+              description: Contact's current account exclude ids.
+            names:
+              type: array
+              items:
+                type: string
+              description: Contact's current account names
+            excludeNames:
+              type: array
+              items:
+                type: string
+              description: Contact's current account exclude names
+            domains:
+              type: array
+              items:
+                type: string
+              description: Contact's current account domains
+            excludeDomains:
+              type: array
+              items:
+                type: string
+              description: Contact's current account exclude domains
+            websites:
+              type: array
+              items:
+                type: string
+              description: Contact's current account websites
+            description:
+              type: string
+              description: Contact's current account description (keyword)
+            excludeDescription:
+              type: string
+              description: Contact's current account excluded description (keyword)
+            shortDescription:
+              type: string
+              description: Contact's current account short description (keyword)
+            keywords:
+              type: array
+              items:
+                type: string
+              description: Contact's current account keywords
+            revenue:
+              type: object
+              properties:
+                from:
+                  type: integer
+                  description: Contact's current account revenue range from
+                to:
+                  type: integer
+                  description: Contact's current account revenue range to
+            founded:
+              type: object
+              properties:
+                from:
+                  type: integer
+                  description: Contact's current account founded year range from
+                fo:
+                  type: integer
+                  description: Contact's current account founded year range to
+            types:
+              type: array
+              items:
+                type: string
+                enum:
+                - Public Company
+                - Educational
+                - Educational Institution
+                - Government Agency
+                - Partnership
+                - Privately Held
+                - Self-Employed
+                - non profit
+              description: 'Contact''s current account type. Allowed values: Public Company , Educational , Educational Institution , Government Agency , Partnership , Privately Held , Self-Employed , non profit'
+            regions:
+              type: array
+              items:
+                type: string
+              description: Contact's current account world regions. Check allowed values Regions
+            countries:
+              type: array
+              items:
+                type: string
+              description: Contact's current account countries. Check allowed values Countries
+            excludeCountries:
+              type: array
+              items:
+                type: string
+              description: Contact's current account excluded countries. Check allowed values Countries
+            states:
+              type: array
+              items:
+                type: string
+              description: Contact's current account states. Check allowed values States
+            excludeStates:
+              type: array
+              items:
+                type: string
+              description: Contact's current account excluded states. Check allowed values States
+            cities:
+              type: array
+              items:
+                type: string
+              description: Contact's current account cities
+            excludeCities:
+              type: array
+              items:
+                type: string
+              description: Contact's current account excluded cities
+            zip:
+              type: array
+              items:
+                type: string
+              description: Contact's current account zip codes
+            locations:
+              type: array
+              items:
+                type: object
+                properties:
+                  country:
+                    type: string
+                    description: Account location country
+                  city:
+                    type: string
+                    description: Account location city
+                  state:
+                    type: string
+                    description: Account location state
+                  zip:
+                    type: string
+                    description: Account zip or postal code
+              description: Array of object containing country, city, state and zip codes. OR logic is applied between objects
+            industries:
+              type: array
+              items:
+                type: string
+              description: Contact current account industries. Check allowed values Industries
+            excludeIndustries:
+              type: array
+              items:
+                type: string
+              description: Contact's current account excluded industries. Check allowed values Industries
+            sic:
+              type: array
+              items:
+                type: string
+              description: Contact's current account SIC codes. Check allowed values SIC Codes
+            isic:
+              type: array
+              items:
+                type: string
+              description: Contact's current account ISIC codes. Check allowed values ISIC Codes
+            naics:
+              type: array
+              items:
+                type: string
+              description: Contact's current account NAICS codes. Check allowed values NAICS Codes
+            headcount:
+              type: object
+              properties:
+                from:
+                  type: integer
+                  description: Contact's current account headcount minimum
+                to:
+                  type: integer
+                  description: Contact's current account headcount maximum
+            technologies:
+              type: array
+              items:
+                type: string
+              description: Contact's current account technologies used. Check allowed values Technologies
+            excludedTechnologies:
+              type: array
+              items:
+                type: string
+              description: Contact's current account exclude technologies used. Check allowed values Technologies
+            lastConfirmed:
+              type: object
+              properties:
+                from:
+                  type: integer
+                  description: Contact's current account time updated range from. (Unix timestamp in milliseconds)
+                to:
+                  type: integer
+                  description: Contact's current account time updated range to. (Unix timestamp in milliseconds)
+            hqPhoneNumbers:
+              type: object
+              properties:
+                medium:
+                  type: boolean
+                  description: Search contacts with account having medium quality HQ phone numbers
+                high:
+                  type: boolean
+                  description: Search contacts with account having high quality HQ phone numbers
+                highPlus:
+                  type: boolean
+                  description: Search contacts with account having highPlus quality HQ phone numbers
+            officePhoneNumbers:
+              type: object
+              properties:
+                medium:
+                  type: boolean
+                  description: Search contacts with account having medium quality office phone numbers
+                high:
+                  type: boolean
+                  description: Search contacts with account having high quality HQ phone numbers
+                highPlus:
+                  type: boolean
+                  description: Search contacts with account having highPlus quality HQ phone numbers
+            hiringEvent:
+              type: object
+              properties:
+                eventDateFrom:
+                  type: integer
+                  description: Contact's current account hiring event date range from (Unix timestamp in milliseconds)
+                eventDateTo:
+                  type: integer
+                  description: Contact's current account hiring event date range to (Unix timestamp in milliseconds)
+                jobTitle:
+                  type: string
+                  description: Contact's current account hiring event job title
+                department:
+                  type: string
+                  enum:
+                  - legal
+                  - it
+                  - administration
+                  - marketing
+                  - sales
+                  - R&D
+                  - customer
+                  - operations
+                  - finance
+                  description: 'Contact''s current account hiring event hiring department. Allowed values: legal, it, administration, marketing, sales, R&D, customer, operations, finance'
+                country:
+                  type: array
+                  items:
+                    type: string
+                  description: Contact's current account hiring event job place countries
+                state:
+                  type: array
+                  items:
+                    type: string
+                  description: Contact's current account hiring event job place states
+                city:
+                  type: array
+                  items:
+                    type: string
+                  description: Contact's current account hiring event job place cities
+            fundingEvent:
+              type: object
+              properties:
+                eventDateFrom:
+                  type: integer
+                  description: Start date (timestamp) of the funding event
+                eventDateTo:
+                  type: integer
+                  description: End date (timestamp) of the funding event
+                fundingType:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - venture
+                    - seed
+                    - grant
+                    - private_equity
+                    - angel
+                    - debt_financing
+                    - corporate_round
+                    - convertible note
+                    - equity_crowfunding
+                  description: 'Types of funding rounds. Allowed values: venture, seed, grant, private_equity, angel, debt_financing, corporate_round, convertible note, equity_crowfunding'
+                series:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - A
+                    - B
+                    - C
+                    - D
+                    - E
+                    - F
+                    - G
+                    - H
+                    - I
+                    - J
+                    - K
+                  description: 'Series classifications of the funding event. Allowed values: A, B, C, D, E, F, G, H, I, J, K'
+            ipoEvent:
+              type: object
+              properties:
+                eventDateFrom:
+                  type: integer
+                  description: Start date (timestamp) of the IPO event
+                eventDateTo:
+                  type: integer
+                  description: End date (timestamp) of the IPO event
+            acquisitionEvent:
+              type: object
+              properties:
+                eventDateFrom:
+                  type: integer
+                  description: Start date (timestamp) of the acquisition event
+                eventDateTo:
+                  type: integer
+                  description: End date (timestamp) of the acquisition event
+                acquirer:
+                  type: array
+                  items:
+                    type: string
+                  description: Names of acquiring companies
+                acquiree:
+                  type: array
+                  items:
+                    type: string
+                  description: Names of acquired companies
+            accountSearchOptions:
+              type: object
+              properties:
+                match_exact_account_name:
+                  type: boolean
+                match_exact_domain:
+                  type: boolean
+                filter_email:
+                  type: string
+                  enum:
+                  - exists
+                  - missing
+                  description: 'Allowed values: exists, missing'
+                show_max_events:
+                  type: integer
+                filter_domain:
+                  type: string
+                  enum:
+                  - exists
+                  - missing
+                  description: 'Allowed values: exists, missing'
+                location_type:
+                  type: string
+                  enum:
+                  - ALL
+                  - HQ
+                  description: 'Allowed values: ALL, HQ'
+                events_operator:
+                  type: string
+                  enum:
+                  - AND
+                  - OR
+                  description: 'Allowed values: AND, OR Default value is OR'
+                operators:
+                  type: object
+                  properties:
+                    technologies:
+                      type: string
+                      enum:
+                      - AND
+                      - OR
+                      description: 'Allowed values: AND, OR'
+                    excludedTechnologies:
+                      type: string
+                      enum:
+                      - AND
+                      - OR
+                      description: 'Allowed values: AND, OR'
+        previousAccounts:
+          type: object
+          properties:
+            names:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies names
+            excludeNames:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies exclude names
+            titles:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies job titles
+            regions:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies world regions. Check allowed values Regions
+            countries:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies countries. Check allowed values Countries
+            excludeCountries:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies excluded countries. Check allowed values Countries
+            states:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies states. Check allowed values States
+            excludeStates:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies excluded states. Check allowed values States
+            cities:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies cities
+            excludeCities:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies excluded cities
+            zip:
+              type: array
+              items:
+                type: string
+              description: Contact's previous companies zip codes
+            emailQuality:
+              type: object
+              properties:
+                medium:
+                  type: boolean
+                high:
+                  type: boolean
+                highPlus:
+                  type: boolean
+            jobFunction:
+              type: array
+              items:
+                type: string
+            seniority:
+              type: array
+              items:
+                type: string
+            managementLevel:
+              type: array
+              items:
+                type: string
+        searchOptions:
+          type: object
+          properties:
+            match_exact_job_title:
+              type: boolean
+              description: 'When set to false (default), the job title search uses tokenized matching. This means it will return any job titles that contain all the input tokens, regardless of order or additional context. Example: Searching for "Partnerships Manager" may return results like: - "Partnerships Manager" - "Senior Manager, Integrated Marketing Partnerships" - "Corporate Partnerships Account Manager" - Any other title containing both words: Partnerships and Manager When set to true, only job titles that exactly match the input string (case-insensitive, but word-for-word) will be returned. Example: Searching fo'
+            ai_job_title:
+              type: boolean
+              description: AI expansion of job titles
+            sort_fields:
+              type: array
+              items:
+                type: string
+                enum:
+                - LastConfirmedContactDESC
+                - LastConfirmedContactASC
+                - EmailQualityDESC
+                - EmailQualityASC
+                - ProfileScoreDESC
+                - ProfileScoreASC
+              description: 'Allowed values: LastConfirmedContactDESC, LastConfirmedContactASC, EmailQualityDESC, EmailQualityASC, ProfileScoreDESC, ProfileScoreASC'
+        locationMoveEvent:
+          type: object
+          properties:
+            eventDateFrom:
+              type: integer
+              description: Contact location move event date range from (Unix timestamp in milliseconds)
+            eventDateTo:
+              type: integer
+              description: Contact location move event date range to (Unix timestamp in milliseconds)
+            fromCountry:
+              type: array
+              items:
+                type: string
+              description: Contact location move from country
+            fromState:
+              type: array
+              items:
+                type: string
+              description: Contact location move from state
+            fromCity:
+              type: array
+              items:
+                type: string
+              description: Contact location move from city
+            toCountry:
+              type: array
+              items:
+                type: string
+              description: Contact location move to country
+            toState:
+              type: array
+              items:
+                type: string
+              description: Contact location move to state
+            toCity:
+              type: array
+              items:
+                type: string
+              description: Contact location move to city
+        jobJoinEvent:
+          type: object
+          properties:
+            eventDateFrom:
+              type: integer
+              description: Contact job join event date range from (Unix timestamp in milliseconds)
+            eventDateTo:
+              type: integer
+              description: Contact job join event date range to (Unix timestamp in milliseconds)
+            fromCompany:
+              type: array
+              items:
+                type: string
+              description: Contact job join from company
+            fromJobTitle:
+              type: array
+              items:
+                type: string
+              description: Contact job join from job title
+            fromIndustry:
+              type: array
+              items:
+                type: string
+              description: Contact job join from industry
+            toCompany:
+              type: array
+              items:
+                type: string
+              description: Contact job join to company
+            toJobTitle:
+              type: array
+              items:
+                type: string
+              description: Contact job join to job title
+            toIndustry:
+              type: array
+              items:
+                type: string
+              description: Contact job join to industry
+        jobLeaveEvent:
+          type: object
+          properties:
+            eventDateFrom:
+              type: integer
+              description: Contact job leave event date range from (Unix timestamp in milliseconds)
+            eventDateTo:
+              type: integer
+              description: Contact job leave event date range from (Unix timestamp in milliseconds)
+            fromCompany:
+              type: array
+              items:
+                type: string
+              description: Contact job leave from company
+            fromJobTitle:
+              type: array
+              items:
+                type: string
+              description: Contact job leave from job title
+            fromIndustry:
+              type: array
+              items:
+                type: string
+              description: Contact job leave from industry
+            toCompany:
+              type: array
+              items:
+                type: string
+              description: Contact job leave to company
+            toJobTitle:
+              type: array
+              items:
+                type: string
+              description: Contact job leave to job title
+            toIndustry:
+              type: array
+              items:
+                type: string
+              description: Contact job leave to industry
+      additionalProperties: false
+    AccountPreview:
+      type: object
+      description: Preview projection of an account. `has*` booleans advertise which fields the full record carries; the values themselves arrive from the Redeem API.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        hasDomain:
+          type: boolean
+        hasIndustries:
+          type: boolean
+        hasDescription:
+          type: boolean
+        hasShortDescription:
+          type: boolean
+        hasFounded:
+          type: boolean
+        hasWebsite:
+          type: boolean
+        hasLinkedinUrl:
+          type: boolean
+        hasRevenue:
+          type: boolean
+        hasSic:
+          type: boolean
+        hasIsic:
+          type: boolean
+        hasNaics:
+          type: boolean
+        hasHeadcount:
+          type: boolean
+        hasSize:
+          type: boolean
+        hasTechnologies:
+          type: boolean
+        hasType:
+          type: boolean
+        hasLocation:
+          type: boolean
+        hasOfficePhoneNumbers:
+          type: boolean
+        hasHqPhoneNumbers:
+          type: boolean
+        hasHiringEvent:
+          type: boolean
+      additionalProperties: true
+    AccountSearchResponse:
+      type: object
+      properties:
+        lastReturnedKey:
+          type: string
+          description: Forward-only paging cursor.
+        totalResults:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountPreview'
+    ContactSearchResponse:
+      type: object
+      properties:
+        lastReturnedKey:
+          type: string
+          description: Opaque cursor. Pass it back as the `lastReturnedKey` query parameter to fetch the next page. Paging is forward-only.
+        totalResults:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactPreview'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token issued in the Cognism app under Settings > Tokens and API. Sent as `Authorization: Bearer <token>`. Tokens have a time-to-live of 6 months.'
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Alternative to the Authorization header. Cognism documents it but recommends the header instead, as the query string is less secure.

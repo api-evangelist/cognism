@@ -1,0 +1,533 @@
+openapi: 3.2.0
+info:
+  title: Cognism Enrich API
+  version: '2026-08-13'
+  summary: Search, enrich and redeem B2B contact and company data from the Cognism database.
+  description: 'The Cognism API is used to search, preview and enrich Contacts and Accounts.
+
+
+    It is composed of three services that are used together:
+
+
+    - **Search API** - find contacts or companies matching a filter set. Returns preview records, each carrying a `redeemId`.
+
+    - **Enrich API** - find the best matching Cognism record for a contact or company you already hold. Returns a preview, a `matchScore` and a `redeemId`.
+
+    - **Redeem API** - exchange a `redeemId` for the full record.
+
+
+    Search and Enrich return preview data only and do not consume Credits. Credits are consumed when a contact is redeemed for the first time; account redemptions and repeat contact redemptions are free.
+
+
+    The fields a Redeem response carries are governed by your organisation API Entitlements, configured by Cognism. Query the Entitlement API to read them.
+
+
+    API access is sales-gated: it must be enabled on your subscription, entitlements configured by the Cognism Provisioning team, and an API token generated in the Cognism app under Settings > Tokens and API.
+
+
+    _Derived by API Evangelist from the Cognism API Postman collection published by Cognism at https://developers.cognism.com/ . Not an official Cognism artifact._'
+  contact:
+    name: Cognism
+    url: https://www.cognism.com/contact
+  termsOfService: https://www.cognism.com/terms-of-website-use
+  x-source: https://documenter.gw.postman.com/api/collections/14862827/UVJhBu4C
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-on: '2026-08-13'
+servers:
+- url: https://app.cognism.com
+  description: Production. Value of the `baseUrl` variable in the Production environment published with the Cognism API Postman collection.
+security:
+- bearerAuth: []
+tags:
+- name: Enrich
+  description: Match a record you already hold to a Cognism record.
+paths:
+  /api/search/contact/enrich:
+    post:
+      operationId: enrichContact
+      summary: Enrich a contact
+      description: Find the best matching Cognism contact for a record you already hold. Returns a preview plus a `matchScore` and `redeemId`. Enrich does not consume Credits. Default minMatchScore is 30.
+      tags:
+      - Enrich
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactEnrichRequest'
+            examples:
+              byEmail:
+                summary: Enrich Contact (collection example)
+                value:
+                  email: stjepan.buljat@cognism.com
+      responses:
+        '200':
+          description: Best matching contact preview.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrichContactResponse'
+              examples:
+                EnrichContactbyemailAdvancedEntitlement:
+                  summary: Enrich Contact by email Advanced Entitlement
+                  value:
+                    matchScore: 42
+                    results:
+                    - id: 7351d07c-9118-403b-a7c1-d6510cc0c378
+                      fullName: Stjepan Buljat
+                      firstName: Stjepan
+                      lastName: Buljat
+                      jobTitle: CTO
+                      hasManagementLevel: true
+                      hasSeniority: true
+                      hasJobFunction: true
+                      hasPositionStartDate: true
+                      hasEmail: true
+                      hasMobilePhoneNumbers: false
+                      hasDirectPhoneNumbers: false
+                      hasJobJoinEvent: false
+                      hasJobLeaveEvent: false
+                      hasLocationMoveEvent: false
+                      hasCountry: true
+                      hasState: false
+                      hasCity: true
+                      hasZip: false
+                      hasStreet: true
+                      hasLinkedinUrl: true
+                      hasEducation: true
+                      hasPreviousAccounts: true
+                      hasSkills: true
+                      hasLastConfirmed: true
+                      redeemId: MzRkNjMzYjctNDFlYS0zYWM3LWEyODAtNDMxZDcxZmQ3N2ViOzhkMDlhZGJhLTczMDYtMzhlMS1iODRiLWU4NmU2OWU3MGU3YjtlZmM2ZDk3NS04NTk5LTM4YWItOGNmZS1lMWM0MmFjMTZkYzY
+                      account:
+                        id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                        name: Cognism
+                        hasDomain: true
+                        hasIndustries: true
+                        hasDescription: true
+                        hasShortDescription: true
+                        hasFounded: true
+                        hasWebsite: true
+                        hasLinkedinUrl: true
+                        hasRevenue: true
+                        hasSic: true
+                        hasIsic: false
+                        hasNaics: true
+                        hasHeadcount: true
+                        hasSize: true
+                        hasTechnologies: true
+                        hasType: true
+                        hasLocation: true
+                        hasOfficePhoneNumbers: false
+                        hasHqPhoneNumbers: true
+                        hasHiringEvent: true
+                EnrichContactbylinkedinUrlAdvancedEntitlement:
+                  summary: Enrich Contact by linkedinUrl Advanced Entitlement
+                  value:
+                    matchScore: 45
+                    results:
+                    - id: 7351d07c-9118-403b-a7c1-d6510cc0c378
+                      fullName: Stjepan Buljat
+                      firstName: Stjepan
+                      lastName: Buljat
+                      jobTitle: CTO
+                      hasManagementLevel: true
+                      hasSeniority: true
+                      hasJobFunction: true
+                      hasPositionStartDate: true
+                      hasEmail: true
+                      hasMobilePhoneNumbers: false
+                      hasDirectPhoneNumbers: false
+                      hasJobJoinEvent: false
+                      hasJobLeaveEvent: false
+                      hasLocationMoveEvent: false
+                      hasCountry: true
+                      hasState: false
+                      hasCity: true
+                      hasZip: false
+                      hasStreet: true
+                      hasLinkedinUrl: true
+                      hasEducation: true
+                      hasPreviousAccounts: true
+                      hasSkills: true
+                      hasLastConfirmed: true
+                      redeemId: MzRkNjMzYjctNDFlYS0zYWM3LWEyODAtNDMxZDcxZmQ3N2ViOzhkMDlhZGJhLTczMDYtMzhlMS1iODRiLWU4NmU2OWU3MGU3YjtlZmM2ZDk3NS04NTk5LTM4YWItOGNmZS1lMWM0MmFjMTZkYzY
+                      account:
+                        id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                        name: Cognism
+                        hasDomain: true
+                        hasIndustries: true
+                        hasDescription: true
+                        hasShortDescription: true
+                        hasFounded: true
+                        hasWebsite: true
+                        hasLinkedinUrl: true
+                        hasRevenue: true
+                        hasSic: true
+                        hasIsic: false
+                        hasNaics: true
+                        hasSize: true
+                        hasTechnologies: true
+                        hasType: true
+                        hasLocation: true
+                        hasOfficePhoneNumbers: false
+                        hasHqPhoneNumbers: true
+                        hasHiringEvent: true
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/account/enrich:
+    post:
+      operationId: enrichAccount
+      summary: Enrich an account
+      description: Find the best matching Cognism company for a record you already hold. Returns a preview plus a `matchScore`. Enrich does not consume Credits. Default minMatchScore is 40.
+      tags:
+      - Enrich
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountEnrichRequest'
+            examples:
+              byWebsite:
+                summary: Enrich Account (collection example)
+                value:
+                  website: www.cognism.com
+      responses:
+        '200':
+          description: Best matching account preview.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrichAccountResponse'
+              examples:
+                EnrichAccountbywebsiteAdvancedEntitlement:
+                  summary: Enrich Account by website Advanced Entitlement
+                  value:
+                    matchScore: 46
+                    results:
+                    - id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                      name: Cognism
+                      hasDomain: true
+                      hasIndustries: true
+                      hasDescription: true
+                      hasShortDescription: true
+                      hasFounded: true
+                      hasWebsite: true
+                      hasLinkedinUrl: true
+                      hasRevenue: true
+                      hasSic: true
+                      hasIsic: false
+                      hasNaics: true
+                      hasHeadcount: true
+                      hasSize: true
+                      hasTechnologies: true
+                      hasType: true
+                      hasLocation: true
+                      hasOfficePhoneNumbers: false
+                      hasHqPhoneNumbers: true
+                      hasHiringEvent: false
+                EnrichAccountbydomainAdvancedEntitlement:
+                  summary: Enrich Account by domain Advanced Entitlement
+                  value:
+                    matchScore: 45
+                    results:
+                    - id: efc6d975-8599-38ab-8cfe-e1c42ac16dc6
+                      name: Cognism
+                      hasDomain: true
+                      hasIndustries: true
+                      hasDescription: true
+                      hasShortDescription: true
+                      hasFounded: true
+                      hasWebsite: true
+                      hasLinkedinUrl: true
+                      hasRevenue: true
+                      hasSic: true
+                      hasIsic: false
+                      hasNaics: true
+                      hasHeadcount: true
+                      hasSize: true
+                      hasTechnologies: true
+                      hasType: true
+                      hasLocation: true
+                      hasOfficePhoneNumbers: false
+                      hasHqPhoneNumbers: true
+                      hasHiringEvent: false
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ContactPreview:
+      type: object
+      description: Preview projection of a contact. `has*` booleans advertise which fields the full record carries. `redeemId` is the key for the Redeem API.
+      properties:
+        id:
+          type: string
+        redeemId:
+          type: string
+        fullName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        jobTitle:
+          type: string
+        account:
+          $ref: '#/components/schemas/AccountPreview'
+        hasEmail:
+          type: boolean
+        hasMobilePhoneNumbers:
+          type: boolean
+        hasDirectPhoneNumbers:
+          type: boolean
+        hasLinkedinUrl:
+          type: boolean
+        hasSkills:
+          type: boolean
+        hasEducation:
+          type: boolean
+        hasPreviousAccounts:
+          type: boolean
+        hasSeniority:
+          type: boolean
+        hasJobFunction:
+          type: boolean
+        hasManagementLevel:
+          type: boolean
+        hasPositionStartDate:
+          type: boolean
+        hasLastConfirmed:
+          type: boolean
+      additionalProperties: true
+    Error:
+      type: array
+      description: Cognism returns errors as an array of error objects.
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            description: Machine-readable error key, e.g. MissingCredentials.
+          code:
+            type: integer
+            description: HTTP status code, repeated in the body.
+          msg:
+            type: string
+            description: Human-readable message.
+    EnrichAccountResponse:
+      type: object
+      properties:
+        matchScore:
+          type: integer
+          description: Default minimum is 40; anything under 35 is a low-quality match.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountPreview'
+    ContactEnrichRequest:
+      type: object
+      description: Identifiers for the contact to match. Supply a unique identifier (email, sha256 or linkedinUrl) or combine firstName + lastName with accountName / accountWebsite. Default minMatchScore is 30.
+      properties:
+        firstName:
+          type: string
+          description: Contact first name
+        lastName:
+          type: string
+          description: Contact last name
+        linkedinUrl:
+          type: string
+          description: Contact LinkedIn URL
+        phoneNumber:
+          type: string
+          description: Contact Phone Number (searched any type of number)
+        jobTitle:
+          type: string
+          description: Contact job title
+        email:
+          type: string
+          description: Contact email
+        sha256:
+          type: string
+          description: Contact email hash
+        accountWebsite:
+          type: string
+          description: Account website
+        accountName:
+          type: string
+          description: Account name
+        anchorFields:
+          type: array
+          items:
+            type: string
+          description: Fields that must match
+        minMatchScore:
+          type: integer
+          description: Minimum Match Score to return matched Account
+      additionalProperties: false
+    AccountEnrichRequest:
+      type: object
+      description: Identifiers for the account to match. Supply website, domain or linkedinUrl for the most accurate match. Default minMatchScore is 40.
+      properties:
+        linkedinUrl:
+          type: string
+          description: Account LinkedIn URL
+        domain:
+          type: string
+          description: Account domain
+        website:
+          type: string
+          description: Account website
+        name:
+          type: string
+          description: Account name
+        country:
+          type: string
+          description: Account country
+        city:
+          type: string
+          description: Account city
+        anchorFields:
+          type: array
+          items:
+            type: string
+          description: Fields that must match
+        minMatchScore:
+          type: integer
+          description: Minimum Match Score to return matched Account
+      additionalProperties: false
+    AccountPreview:
+      type: object
+      description: Preview projection of an account. `has*` booleans advertise which fields the full record carries; the values themselves arrive from the Redeem API.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        hasDomain:
+          type: boolean
+        hasIndustries:
+          type: boolean
+        hasDescription:
+          type: boolean
+        hasShortDescription:
+          type: boolean
+        hasFounded:
+          type: boolean
+        hasWebsite:
+          type: boolean
+        hasLinkedinUrl:
+          type: boolean
+        hasRevenue:
+          type: boolean
+        hasSic:
+          type: boolean
+        hasIsic:
+          type: boolean
+        hasNaics:
+          type: boolean
+        hasHeadcount:
+          type: boolean
+        hasSize:
+          type: boolean
+        hasTechnologies:
+          type: boolean
+        hasType:
+          type: boolean
+        hasLocation:
+          type: boolean
+        hasOfficePhoneNumbers:
+          type: boolean
+        hasHqPhoneNumbers:
+          type: boolean
+        hasHiringEvent:
+          type: boolean
+      additionalProperties: true
+    EnrichContactResponse:
+      type: object
+      properties:
+        matchScore:
+          type: integer
+          description: How closely the submitted identifiers matched. Default minimum is 30; anything under 27 is a low-quality match.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactPreview'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token issued in the Cognism app under Settings > Tokens and API. Sent as `Authorization: Bearer <token>`. Tokens have a time-to-live of 6 months.'
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Alternative to the Authorization header. Cognism documents it but recommends the header instead, as the query string is less secure.

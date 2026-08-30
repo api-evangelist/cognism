@@ -1,0 +1,253 @@
+openapi: 3.2.0
+info:
+  title: Cognism Compliance API
+  version: '2026-08-13'
+  summary: Search, enrich and redeem B2B contact and company data from the Cognism database.
+  description: 'The Cognism API is used to search, preview and enrich Contacts and Accounts.
+
+
+    It is composed of three services that are used together:
+
+
+    - **Search API** - find contacts or companies matching a filter set. Returns preview records, each carrying a `redeemId`.
+
+    - **Enrich API** - find the best matching Cognism record for a contact or company you already hold. Returns a preview, a `matchScore` and a `redeemId`.
+
+    - **Redeem API** - exchange a `redeemId` for the full record.
+
+
+    Search and Enrich return preview data only and do not consume Credits. Credits are consumed when a contact is redeemed for the first time; account redemptions and repeat contact redemptions are free.
+
+
+    The fields a Redeem response carries are governed by your organisation API Entitlements, configured by Cognism. Query the Entitlement API to read them.
+
+
+    API access is sales-gated: it must be enabled on your subscription, entitlements configured by the Cognism Provisioning team, and an API token generated in the Cognism app under Settings > Tokens and API.
+
+
+    _Derived by API Evangelist from the Cognism API Postman collection published by Cognism at https://developers.cognism.com/ . Not an official Cognism artifact._'
+  contact:
+    name: Cognism
+    url: https://www.cognism.com/contact
+  termsOfService: https://www.cognism.com/terms-of-website-use
+  x-source: https://documenter.gw.postman.com/api/collections/14862827/UVJhBu4C
+  x-derived-by: API Evangelist enrichment pipeline
+  x-derived-on: '2026-08-13'
+servers:
+- url: https://app.cognism.com
+  description: Production. Value of the `baseUrl` variable in the Production environment published with the Cognism API Postman collection.
+security:
+- bearerAuth: []
+tags:
+- name: Compliance
+  description: Opt-out list lookups for GDPR/CCPA suppression.
+paths:
+  /api/search/contact/optOut:
+    get:
+      operationId: listOptOutContacts
+      summary: List opt-out contacts
+      description: Return the contacts that have opted out of Cognism data processing. Include `pageKey` from the previous response to request the next page.
+      tags:
+      - Compliance
+      parameters:
+      - name: pageSize
+        in: query
+        required: false
+        description: Records per page.
+        schema:
+          type: integer
+          default: 100
+      - name: pageKey
+        in: query
+        required: false
+        description: Paging cursor returned with every response.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Opt-out records.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/contact/optOut/email/{email}:
+    get:
+      operationId: getOptOutByEmail
+      summary: Check opt-out status by email
+      description: Look up whether a specific email address is on the Cognism opt-out list.
+      tags:
+      - Compliance
+      parameters:
+      - name: email
+        in: path
+        required: true
+        description: Email address to check.
+        schema:
+          type: string
+          format: email
+      responses:
+        '200':
+          description: Opt-out record for the email address.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/search/contact/optOut/id/{id}:
+    get:
+      operationId: getOptOutById
+      summary: Check opt-out status by redeem ID
+      description: Look up whether a specific contact (by redeem ID) is on the Cognism opt-out list.
+      tags:
+      - Compliance
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Contact redeem ID.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Opt-out record for the contact.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Bad Request. The request body is invalid, a required field is missing, a parameter name is wrong, or a data type does not match the specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized. The API token is missing, invalid, expired, or the Authorization header is malformed. Entitlements may also be unset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingCredentials:
+                  value:
+                  - key: MissingCredentials
+                    code: 401
+                    msg: Missing required credentials
+        '404':
+          description: Not Found. The route does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                routeNotFound:
+                  value:
+                  - key: RouteNotFound
+                    code: 404
+                    msg: Not found
+        '429':
+          description: Rate limit exceeded. Reduce request frequency and retry with backoff. Redeem throughput is capped at 1,000 records per minute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: array
+      description: Cognism returns errors as an array of error objects.
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            description: Machine-readable error key, e.g. MissingCredentials.
+          code:
+            type: integer
+            description: HTTP status code, repeated in the body.
+          msg:
+            type: string
+            description: Human-readable message.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token issued in the Cognism app under Settings > Tokens and API. Sent as `Authorization: Bearer <token>`. Tokens have a time-to-live of 6 months.'
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Alternative to the Authorization header. Cognism documents it but recommends the header instead, as the query string is less secure.
