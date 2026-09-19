@@ -128,6 +128,8 @@ apis:
   humanURL: https://developers.cognism.com/
   baseURL: https://app.cognism.com
   tags:
+  - Entitlements
+  tags_raw:
   - Entitlement
   properties:
   - type: OpenAPI
