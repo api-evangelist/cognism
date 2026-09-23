@@ -3,29 +3,7 @@ info:
   title: Cognism Enrich API
   version: '2026-08-13'
   summary: Search, enrich and redeem B2B contact and company data from the Cognism database.
-  description: 'The Cognism API is used to search, preview and enrich Contacts and Accounts.
-
-
-    It is composed of three services that are used together:
-
-
-    - **Search API** - find contacts or companies matching a filter set. Returns preview records, each carrying a `redeemId`.
-
-    - **Enrich API** - find the best matching Cognism record for a contact or company you already hold. Returns a preview, a `matchScore` and a `redeemId`.
-
-    - **Redeem API** - exchange a `redeemId` for the full record.
-
-
-    Search and Enrich return preview data only and do not consume Credits. Credits are consumed when a contact is redeemed for the first time; account redemptions and repeat contact redemptions are free.
-
-
-    The fields a Redeem response carries are governed by your organisation API Entitlements, configured by Cognism. Query the Entitlement API to read them.
-
-
-    API access is sales-gated: it must be enabled on your subscription, entitlements configured by the Cognism Provisioning team, and an API token generated in the Cognism app under Settings > Tokens and API.
-
-
-    _Derived by API Evangelist from the Cognism API Postman collection published by Cognism at https://developers.cognism.com/ . Not an official Cognism artifact._'
+  description: The Cognism API is used to search, preview and enrich Contacts and Accounts.
   contact:
     name: Cognism
     url: https://www.cognism.com/contact
@@ -325,49 +303,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ContactPreview:
-      type: object
-      description: Preview projection of a contact. `has*` booleans advertise which fields the full record carries. `redeemId` is the key for the Redeem API.
-      properties:
-        id:
-          type: string
-        redeemId:
-          type: string
-        fullName:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        jobTitle:
-          type: string
-        account:
-          $ref: '#/components/schemas/AccountPreview'
-        hasEmail:
-          type: boolean
-        hasMobilePhoneNumbers:
-          type: boolean
-        hasDirectPhoneNumbers:
-          type: boolean
-        hasLinkedinUrl:
-          type: boolean
-        hasSkills:
-          type: boolean
-        hasEducation:
-          type: boolean
-        hasPreviousAccounts:
-          type: boolean
-        hasSeniority:
-          type: boolean
-        hasJobFunction:
-          type: boolean
-        hasManagementLevel:
-          type: boolean
-        hasPositionStartDate:
-          type: boolean
-        hasLastConfirmed:
-          type: boolean
-      additionalProperties: true
     Error:
       type: array
       description: Cognism returns errors as an array of error objects.
@@ -383,16 +318,6 @@ components:
           msg:
             type: string
             description: Human-readable message.
-    EnrichAccountResponse:
-      type: object
-      properties:
-        matchScore:
-          type: integer
-          description: Default minimum is 40; anything under 35 is a low-quality match.
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountPreview'
     ContactEnrichRequest:
       type: object
       description: Identifiers for the contact to match. Supply a unique identifier (email, sha256 or linkedinUrl) or combine firstName + lastName with accountName / accountWebsite. Default minMatchScore is 30.
@@ -464,6 +389,69 @@ components:
           type: integer
           description: Minimum Match Score to return matched Account
       additionalProperties: false
+    EnrichContactResponse:
+      type: object
+      properties:
+        matchScore:
+          type: integer
+          description: How closely the submitted identifiers matched. Default minimum is 30; anything under 27 is a low-quality match.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactPreview'
+    EnrichAccountResponse:
+      type: object
+      properties:
+        matchScore:
+          type: integer
+          description: Default minimum is 40; anything under 35 is a low-quality match.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountPreview'
+    ContactPreview:
+      type: object
+      description: Preview projection of a contact. `has*` booleans advertise which fields the full record carries. `redeemId` is the key for the Redeem API.
+      properties:
+        id:
+          type: string
+        redeemId:
+          type: string
+        fullName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        jobTitle:
+          type: string
+        account:
+          $ref: '#/components/schemas/AccountPreview'
+        hasEmail:
+          type: boolean
+        hasMobilePhoneNumbers:
+          type: boolean
+        hasDirectPhoneNumbers:
+          type: boolean
+        hasLinkedinUrl:
+          type: boolean
+        hasSkills:
+          type: boolean
+        hasEducation:
+          type: boolean
+        hasPreviousAccounts:
+          type: boolean
+        hasSeniority:
+          type: boolean
+        hasJobFunction:
+          type: boolean
+        hasManagementLevel:
+          type: boolean
+        hasPositionStartDate:
+          type: boolean
+        hasLastConfirmed:
+          type: boolean
+      additionalProperties: true
     AccountPreview:
       type: object
       description: Preview projection of an account. `has*` booleans advertise which fields the full record carries; the values themselves arrive from the Redeem API.
@@ -511,16 +499,6 @@ components:
         hasHiringEvent:
           type: boolean
       additionalProperties: true
-    EnrichContactResponse:
-      type: object
-      properties:
-        matchScore:
-          type: integer
-          description: How closely the submitted identifiers matched. Default minimum is 30; anything under 27 is a low-quality match.
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContactPreview'
   securitySchemes:
     bearerAuth:
       type: http

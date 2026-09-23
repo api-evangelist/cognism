@@ -1,0 +1,30 @@
+{
+  "provider": "cognism",
+  "sources": [
+    "_ae-authored/cognism-api-openapi.yml"
+  ],
+  "outputs": [
+    "cognism-compliance-api-openapi.yml",
+    "cognism-enrich-api-openapi.yml",
+    "cognism-entitlement-api-openapi.yml",
+    "cognism-filter-api-openapi.yml",
+    "cognism-redeem-api-openapi.yml",
+    "cognism-search-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "cognism-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "cognism-compliance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cognism-enrich-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cognism-entitlement-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cognism-filter-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cognism-redeem-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cognism-search-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

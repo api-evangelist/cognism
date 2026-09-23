@@ -3,29 +3,7 @@ info:
   title: Cognism Compliance API
   version: '2026-08-13'
   summary: Search, enrich and redeem B2B contact and company data from the Cognism database.
-  description: 'The Cognism API is used to search, preview and enrich Contacts and Accounts.
-
-
-    It is composed of three services that are used together:
-
-
-    - **Search API** - find contacts or companies matching a filter set. Returns preview records, each carrying a `redeemId`.
-
-    - **Enrich API** - find the best matching Cognism record for a contact or company you already hold. Returns a preview, a `matchScore` and a `redeemId`.
-
-    - **Redeem API** - exchange a `redeemId` for the full record.
-
-
-    Search and Enrich return preview data only and do not consume Credits. Credits are consumed when a contact is redeemed for the first time; account redemptions and repeat contact redemptions are free.
-
-
-    The fields a Redeem response carries are governed by your organisation API Entitlements, configured by Cognism. Query the Entitlement API to read them.
-
-
-    API access is sales-gated: it must be enabled on your subscription, entitlements configured by the Cognism Provisioning team, and an API token generated in the Cognism app under Settings > Tokens and API.
-
-
-    _Derived by API Evangelist from the Cognism API Postman collection published by Cognism at https://developers.cognism.com/ . Not an official Cognism artifact._'
+  description: The Cognism API is used to search, preview and enrich Contacts and Accounts.
   contact:
     name: Cognism
     url: https://www.cognism.com/contact
