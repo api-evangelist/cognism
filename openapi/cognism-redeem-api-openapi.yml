@@ -1275,28 +1275,81 @@ components:
           msg:
             type: string
             description: Human-readable message.
-    ContactRedeemResponse:
+    AccountRedeemResponse:
       type: object
       properties:
-        totalResults:
+        total:
           type: integer
-        results:
+        result:
           type: array
           items:
-            $ref: '#/components/schemas/Contact'
-    RedeemRequest:
+            $ref: '#/components/schemas/Account'
+    Contact:
       type: object
-      required:
-      - redeemIds
-      description: Redeem IDs returned by the Search or Enrich API. 1-20 IDs per request.
+      description: Full contact record. Only fields inside your organisation API Entitlement are returned. Redeeming a contact consumes Credits the first time.
       properties:
-        redeemIds:
+        id:
+          type: string
+        redeemId:
+          type: string
+        fullName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        jobTitle:
+          type: string
+        seniority:
+          type: string
+        managementLevel:
+          type: string
+        jobFunction:
+          type: string
+        email:
+          type: string
+        linkedinUrl:
+          type: string
+        mobilePhoneNumbers:
           type: array
-          minItems: 1
-          maxItems: 20
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        directPhoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        skills:
+          type: array
           items:
             type: string
-          description: Redeem IDs from a Search or Enrich response. For accounts the account `id` is used. An outdated contact redeemId falls back to the current one and the new redeemId is returned alongside the data.
+        education:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        previousAccounts:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        account:
+          $ref: '#/components/schemas/Account'
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+        street:
+          type: string
+        positionStartDate:
+          type: string
+        lastConfirmed:
+          type: integer
+          description: Unix timestamp in milliseconds.
+      additionalProperties: true
     PhoneNumber:
       type: object
       description: A phone number with its quality score and Do-Not-Call flag.
@@ -1314,22 +1367,15 @@ components:
           description: Do Not Call flag.
         addressType:
           type: string
-    Location:
+    ContactRedeemResponse:
       type: object
       properties:
-        addressType:
-          type: string
-          description: office or hq.
-        country:
-          type: string
-        state:
-          type: string
-        city:
-          type: string
-        street:
-          type: string
-        zip:
-          type: string
+        totalResults:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
     Account:
       type: object
       description: Full account record. Only fields inside your organisation API Entitlement are returned.
@@ -1401,81 +1447,35 @@ components:
           type: integer
           description: Unix timestamp in milliseconds.
       additionalProperties: true
-    Contact:
+    Location:
       type: object
-      description: Full contact record. Only fields inside your organisation API Entitlement are returned. Redeeming a contact consumes Credits the first time.
       properties:
-        id:
+        addressType:
           type: string
-        redeemId:
-          type: string
-        fullName:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        jobTitle:
-          type: string
-        seniority:
-          type: string
-        managementLevel:
-          type: string
-        jobFunction:
-          type: string
-        email:
-          type: string
-        linkedinUrl:
-          type: string
-        mobilePhoneNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        directPhoneNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        skills:
-          type: array
-          items:
-            type: string
-        education:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-        previousAccounts:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-        account:
-          $ref: '#/components/schemas/Account'
+          description: office or hq.
         country:
           type: string
         state:
           type: string
         city:
           type: string
-        zip:
-          type: string
         street:
           type: string
-        positionStartDate:
+        zip:
           type: string
-        lastConfirmed:
-          type: integer
-          description: Unix timestamp in milliseconds.
-      additionalProperties: true
-    AccountRedeemResponse:
+    RedeemRequest:
       type: object
+      required:
+      - redeemIds
+      description: Redeem IDs returned by the Search or Enrich API. 1-20 IDs per request.
       properties:
-        total:
-          type: integer
-        result:
+        redeemIds:
           type: array
+          minItems: 1
+          maxItems: 20
           items:
-            $ref: '#/components/schemas/Account'
+            type: string
+          description: Redeem IDs from a Search or Enrich response. For accounts the account `id` is used. An outdated contact redeemId falls back to the current one and the new redeemId is returned alongside the data.
   securitySchemes:
     bearerAuth:
       type: http

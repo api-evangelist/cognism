@@ -204,19 +204,19 @@ components:
           msg:
             type: string
             description: Human-readable message.
-    AccountEntitlement:
-      type: object
-      description: Map of account field name to whether the organisation is entitled to it.
-      properties:
-        account Entitlement:
-          type: object
-          additionalProperties:
-            type: boolean
     ContactEntitlement:
       type: object
       description: Map of contact field name to whether the organisation is entitled to it.
       properties:
         contact Entitlement:
+          type: object
+          additionalProperties:
+            type: boolean
+    AccountEntitlement:
+      type: object
+      description: Map of account field name to whether the organisation is entitled to it.
+      properties:
+        account Entitlement:
           type: object
           additionalProperties:
             type: boolean

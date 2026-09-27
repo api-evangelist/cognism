@@ -303,112 +303,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: array
-      description: Cognism returns errors as an array of error objects.
-      items:
-        type: object
-        properties:
-          key:
-            type: string
-            description: Machine-readable error key, e.g. MissingCredentials.
-          code:
-            type: integer
-            description: HTTP status code, repeated in the body.
-          msg:
-            type: string
-            description: Human-readable message.
-    ContactEnrichRequest:
-      type: object
-      description: Identifiers for the contact to match. Supply a unique identifier (email, sha256 or linkedinUrl) or combine firstName + lastName with accountName / accountWebsite. Default minMatchScore is 30.
-      properties:
-        firstName:
-          type: string
-          description: Contact first name
-        lastName:
-          type: string
-          description: Contact last name
-        linkedinUrl:
-          type: string
-          description: Contact LinkedIn URL
-        phoneNumber:
-          type: string
-          description: Contact Phone Number (searched any type of number)
-        jobTitle:
-          type: string
-          description: Contact job title
-        email:
-          type: string
-          description: Contact email
-        sha256:
-          type: string
-          description: Contact email hash
-        accountWebsite:
-          type: string
-          description: Account website
-        accountName:
-          type: string
-          description: Account name
-        anchorFields:
-          type: array
-          items:
-            type: string
-          description: Fields that must match
-        minMatchScore:
-          type: integer
-          description: Minimum Match Score to return matched Account
-      additionalProperties: false
-    AccountEnrichRequest:
-      type: object
-      description: Identifiers for the account to match. Supply website, domain or linkedinUrl for the most accurate match. Default minMatchScore is 40.
-      properties:
-        linkedinUrl:
-          type: string
-          description: Account LinkedIn URL
-        domain:
-          type: string
-          description: Account domain
-        website:
-          type: string
-          description: Account website
-        name:
-          type: string
-          description: Account name
-        country:
-          type: string
-          description: Account country
-        city:
-          type: string
-          description: Account city
-        anchorFields:
-          type: array
-          items:
-            type: string
-          description: Fields that must match
-        minMatchScore:
-          type: integer
-          description: Minimum Match Score to return matched Account
-      additionalProperties: false
-    EnrichContactResponse:
-      type: object
-      properties:
-        matchScore:
-          type: integer
-          description: How closely the submitted identifiers matched. Default minimum is 30; anything under 27 is a low-quality match.
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContactPreview'
-    EnrichAccountResponse:
-      type: object
-      properties:
-        matchScore:
-          type: integer
-          description: Default minimum is 40; anything under 35 is a low-quality match.
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountPreview'
     ContactPreview:
       type: object
       description: Preview projection of a contact. `has*` booleans advertise which fields the full record carries. `redeemId` is the key for the Redeem API.
@@ -452,6 +346,102 @@ components:
         hasLastConfirmed:
           type: boolean
       additionalProperties: true
+    Error:
+      type: array
+      description: Cognism returns errors as an array of error objects.
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            description: Machine-readable error key, e.g. MissingCredentials.
+          code:
+            type: integer
+            description: HTTP status code, repeated in the body.
+          msg:
+            type: string
+            description: Human-readable message.
+    AccountEnrichRequest:
+      type: object
+      description: Identifiers for the account to match. Supply website, domain or linkedinUrl for the most accurate match. Default minMatchScore is 40.
+      properties:
+        linkedinUrl:
+          type: string
+          description: Account LinkedIn URL
+        domain:
+          type: string
+          description: Account domain
+        website:
+          type: string
+          description: Account website
+        name:
+          type: string
+          description: Account name
+        country:
+          type: string
+          description: Account country
+        city:
+          type: string
+          description: Account city
+        anchorFields:
+          type: array
+          items:
+            type: string
+          description: Fields that must match
+        minMatchScore:
+          type: integer
+          description: Minimum Match Score to return matched Account
+      additionalProperties: false
+    ContactEnrichRequest:
+      type: object
+      description: Identifiers for the contact to match. Supply a unique identifier (email, sha256 or linkedinUrl) or combine firstName + lastName with accountName / accountWebsite. Default minMatchScore is 30.
+      properties:
+        firstName:
+          type: string
+          description: Contact first name
+        lastName:
+          type: string
+          description: Contact last name
+        linkedinUrl:
+          type: string
+          description: Contact LinkedIn URL
+        phoneNumber:
+          type: string
+          description: Contact Phone Number (searched any type of number)
+        jobTitle:
+          type: string
+          description: Contact job title
+        email:
+          type: string
+          description: Contact email
+        sha256:
+          type: string
+          description: Contact email hash
+        accountWebsite:
+          type: string
+          description: Account website
+        accountName:
+          type: string
+          description: Account name
+        anchorFields:
+          type: array
+          items:
+            type: string
+          description: Fields that must match
+        minMatchScore:
+          type: integer
+          description: Minimum Match Score to return matched Account
+      additionalProperties: false
+    EnrichContactResponse:
+      type: object
+      properties:
+        matchScore:
+          type: integer
+          description: How closely the submitted identifiers matched. Default minimum is 30; anything under 27 is a low-quality match.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactPreview'
     AccountPreview:
       type: object
       description: Preview projection of an account. `has*` booleans advertise which fields the full record carries; the values themselves arrive from the Redeem API.
@@ -499,6 +489,16 @@ components:
         hasHiringEvent:
           type: boolean
       additionalProperties: true
+    EnrichAccountResponse:
+      type: object
+      properties:
+        matchScore:
+          type: integer
+          description: Default minimum is 40; anything under 35 is a low-quality match.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountPreview'
   securitySchemes:
     bearerAuth:
       type: http
