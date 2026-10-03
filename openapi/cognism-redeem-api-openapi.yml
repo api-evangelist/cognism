@@ -1260,6 +1260,22 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Location:
+      type: object
+      properties:
+        addressType:
+          type: string
+          description: office or hq.
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
     Error:
       type: array
       description: Cognism returns errors as an array of error objects.
@@ -1367,15 +1383,6 @@ components:
           description: Do Not Call flag.
         addressType:
           type: string
-    ContactRedeemResponse:
-      type: object
-      properties:
-        totalResults:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Contact'
     Account:
       type: object
       description: Full account record. Only fields inside your organisation API Entitlement are returned.
@@ -1447,22 +1454,6 @@ components:
           type: integer
           description: Unix timestamp in milliseconds.
       additionalProperties: true
-    Location:
-      type: object
-      properties:
-        addressType:
-          type: string
-          description: office or hq.
-        country:
-          type: string
-        state:
-          type: string
-        city:
-          type: string
-        street:
-          type: string
-        zip:
-          type: string
     RedeemRequest:
       type: object
       required:
@@ -1476,6 +1467,15 @@ components:
           items:
             type: string
           description: Redeem IDs from a Search or Enrich response. For accounts the account `id` is used. An outdated contact redeemId falls back to the current one and the new redeemId is returned alongside the data.
+    ContactRedeemResponse:
+      type: object
+      properties:
+        totalResults:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
   securitySchemes:
     bearerAuth:
       type: http

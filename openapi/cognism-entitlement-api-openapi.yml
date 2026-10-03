@@ -189,6 +189,22 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    AccountEntitlement:
+      type: object
+      description: Map of account field name to whether the organisation is entitled to it.
+      properties:
+        account Entitlement:
+          type: object
+          additionalProperties:
+            type: boolean
+    ContactEntitlement:
+      type: object
+      description: Map of contact field name to whether the organisation is entitled to it.
+      properties:
+        contact Entitlement:
+          type: object
+          additionalProperties:
+            type: boolean
     Error:
       type: array
       description: Cognism returns errors as an array of error objects.
@@ -204,22 +220,6 @@ components:
           msg:
             type: string
             description: Human-readable message.
-    ContactEntitlement:
-      type: object
-      description: Map of contact field name to whether the organisation is entitled to it.
-      properties:
-        contact Entitlement:
-          type: object
-          additionalProperties:
-            type: boolean
-    AccountEntitlement:
-      type: object
-      description: Map of account field name to whether the organisation is entitled to it.
-      properties:
-        account Entitlement:
-          type: object
-          additionalProperties:
-            type: boolean
   securitySchemes:
     bearerAuth:
       type: http
