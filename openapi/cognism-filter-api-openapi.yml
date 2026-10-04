@@ -742,11 +742,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    FilterValues:
-      type: array
-      description: Reference list of values accepted by the matching Search API filter.
-      items:
-        type: string
     Error:
       type: array
       description: Cognism returns errors as an array of error objects.
@@ -762,6 +757,11 @@ components:
           msg:
             type: string
             description: Human-readable message.
+    FilterValues:
+      type: array
+      description: Reference list of values accepted by the matching Search API filter.
+      items:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

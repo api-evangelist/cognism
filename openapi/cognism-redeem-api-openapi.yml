@@ -1260,22 +1260,19 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Location:
+    RedeemRequest:
       type: object
+      required:
+      - redeemIds
+      description: Redeem IDs returned by the Search or Enrich API. 1-20 IDs per request.
       properties:
-        addressType:
-          type: string
-          description: office or hq.
-        country:
-          type: string
-        state:
-          type: string
-        city:
-          type: string
-        street:
-          type: string
-        zip:
-          type: string
+        redeemIds:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: string
+          description: Redeem IDs from a Search or Enrich response. For accounts the account `id` is used. An outdated contact redeemId falls back to the current one and the new redeemId is returned alongside the data.
     Error:
       type: array
       description: Cognism returns errors as an array of error objects.
@@ -1300,6 +1297,102 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Account'
+    ContactRedeemResponse:
+      type: object
+      properties:
+        totalResults:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+    Account:
+      type: object
+      description: Full account record. Only fields inside your organisation API Entitlement are returned.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        domain:
+          type: string
+        website:
+          type: string
+        linkedinUrl:
+          type: string
+        description:
+          type: string
+        shortDescription:
+          type: string
+        founded:
+          type: integer
+        revenue:
+          type: integer
+        sizeFrom:
+          type: integer
+        sizeTo:
+          type: integer
+        headcount:
+          type: integer
+        industries:
+          type: array
+          items:
+            type: string
+        technologies:
+          type: array
+          items:
+            type: string
+        type:
+          type: string
+        sic:
+          type: array
+          items:
+            type: string
+        isic:
+          type: array
+          items:
+            type: string
+        naics:
+          type: array
+          items:
+            type: string
+        location:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+        officePhoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        hqPhoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        hiringEvent:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        lastConfirmed:
+          type: integer
+          description: Unix timestamp in milliseconds.
+      additionalProperties: true
+    Location:
+      type: object
+      properties:
+        addressType:
+          type: string
+          description: office or hq.
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        zip:
+          type: string
     Contact:
       type: object
       description: Full contact record. Only fields inside your organisation API Entitlement are returned. Redeeming a contact consumes Credits the first time.
@@ -1383,99 +1476,6 @@ components:
           description: Do Not Call flag.
         addressType:
           type: string
-    Account:
-      type: object
-      description: Full account record. Only fields inside your organisation API Entitlement are returned.
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        domain:
-          type: string
-        website:
-          type: string
-        linkedinUrl:
-          type: string
-        description:
-          type: string
-        shortDescription:
-          type: string
-        founded:
-          type: integer
-        revenue:
-          type: integer
-        sizeFrom:
-          type: integer
-        sizeTo:
-          type: integer
-        headcount:
-          type: integer
-        industries:
-          type: array
-          items:
-            type: string
-        technologies:
-          type: array
-          items:
-            type: string
-        type:
-          type: string
-        sic:
-          type: array
-          items:
-            type: string
-        isic:
-          type: array
-          items:
-            type: string
-        naics:
-          type: array
-          items:
-            type: string
-        location:
-          type: array
-          items:
-            $ref: '#/components/schemas/Location'
-        officePhoneNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        hqPhoneNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        hiringEvent:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-        lastConfirmed:
-          type: integer
-          description: Unix timestamp in milliseconds.
-      additionalProperties: true
-    RedeemRequest:
-      type: object
-      required:
-      - redeemIds
-      description: Redeem IDs returned by the Search or Enrich API. 1-20 IDs per request.
-      properties:
-        redeemIds:
-          type: array
-          minItems: 1
-          maxItems: 20
-          items:
-            type: string
-          description: Redeem IDs from a Search or Enrich response. For accounts the account `id` is used. An outdated contact redeemId falls back to the current one and the new redeemId is returned alongside the data.
-    ContactRedeemResponse:
-      type: object
-      properties:
-        totalResults:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Contact'
   securitySchemes:
     bearerAuth:
       type: http
