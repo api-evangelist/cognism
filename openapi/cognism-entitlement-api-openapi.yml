@@ -189,6 +189,21 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: array
+      description: Cognism returns errors as an array of error objects.
+      items:
+        type: object
+        properties:
+          key:
+            type: string
+            description: Machine-readable error key, e.g. MissingCredentials.
+          code:
+            type: integer
+            description: HTTP status code, repeated in the body.
+          msg:
+            type: string
+            description: Human-readable message.
     AccountEntitlement:
       type: object
       description: Map of account field name to whether the organisation is entitled to it.
@@ -205,21 +220,6 @@ components:
           type: object
           additionalProperties:
             type: boolean
-    Error:
-      type: array
-      description: Cognism returns errors as an array of error objects.
-      items:
-        type: object
-        properties:
-          key:
-            type: string
-            description: Machine-readable error key, e.g. MissingCredentials.
-          code:
-            type: integer
-            description: HTTP status code, repeated in the body.
-          msg:
-            type: string
-            description: Human-readable message.
   securitySchemes:
     bearerAuth:
       type: http
